@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid my-5">
+    <div class="row">
+        <div class="col-10 mx-auto">
+            <div class="card my-5">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="example2" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Fecha</th>
+                                    <th scope="col">Nombre del instructor</th>
+                                    <th scope="col">Programa de formación</th>
+                                    <th scope="col">Ficha</th>
+                                    <th scope="col">Aprendiz</th>
+                                    <th scope="col">Tipo Doc.</th>
+                                    <th scope="col">Documento</th>
+                                    <th scope="col">Correo electrónico</th>
+                                    <th scope="col">Motivo</th>
+                                    <th scope="col">Descripción</th>
+                                    <th scope="col">Evidencias</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for compl in comp_students %}
+                                <tr>
+                                    <td>{{ compl.fecha }}</td>
+                                    <td>{{ compl.nombre_completo_instructor }}</td>
+                                    <td>{{ compl.nombre_programa}}</td>
+                                    <td>{{ compl.ficha }}</td>
+                                    <td>{{ compl.nombre_completo_aprendiz}}</td>
+                                    <td>{{ compl.tipo_documento }}</td>
+                                    <td>{{ compl.documento }}</td>
+                                    <td>{{ compl.correo }}</td>
+                                    <td>{{ compl.motivo }}</td>
+                                    <td>{{ compl.descripcion_motivo }}</td>
+                                    <td><a href="{{ compl.link_evidencias }}">link</a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

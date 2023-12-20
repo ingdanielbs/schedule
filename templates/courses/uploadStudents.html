@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid my-5">
+    <div class="row">
+        <div class="col-10 mx-auto">
+            <div class="card my-5 p-4 rounded-4">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="" class="form-label">Ficha</label>
+                        <input type="text" class="form-control" name="code_course" id="" aria-describedby="helpId" placeholder="" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Estudiantes</label>
+                        <input type="file" class="form-control" name="file" id="" aria-describedby="helpId" placeholder="" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enviar</button>                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

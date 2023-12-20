@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<main class="main-wrapper">
+  <div class="main-content">
+    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+      <div class="breadcrumb-title pe-3">Dashboard</div>
+      <div class="ps-3"> </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-xl-4">
+        <div class="card rounded-4">
+          <div class="card-body">
+            <div class="d-flex align-items-center gap-3 mb-2">
+              <div class="m-4">
+                {% if instructor.gender == 'M' %}
+                <h2 class="mb-0">Bienvenido</h2>
+                {% else %}
+                <h2 class="mb-0">Bienvenida</h2>
+                {% endif %}
+                <h6 class="mb-0 text-muted">{{ instructor.name}}</h6>
+              </div>
+              {% if instructor.gender == 'M' %}
+              <img width="20%" src="{% static 'images/user-dash.png' %}" alt="">
+              {% else %}
+              <img width="20%" src="{% static 'images/user-dash-woman.png' %}" alt="">
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-xl-8">
+        <div class="card rounded-4">
+          <div class="card-body">
+            <div class="d-flex align-items-center justify-content-around flex-wrap gap-4 p-4">
+              <div class="d-flex flex-column align-items-center justify-content-center gap-2">
+                <a href="javascript:;"
+                  class="mb-2 wh-48 bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center">
+                  <i class="material-icons-outlined">layers</i>
+                </a>
+                <h3 class="mb-0">{{quantity_groups}}</h3>
+                <p class="mb-0">Fichas</p>
+              </div>
+              <div class="vr"></div>
+              <div class="d-flex flex-column align-items-center justify-content-center gap-2">
+                <a href="javascript:;"
+                  class="mb-2 wh-48 bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center">
+                  <i class="material-icons-outlined">group</i>
+                </a>
+                <h3 class="mb-0">{{hours}}</h3>
+                <p class="mb-0">Horas semanales</p>
+              </div>
+              <div class="vr"></div>
+              <div class="d-flex flex-column align-items-center justify-content-center gap-2">
+                <a href="javascript:;"
+                  class="mb-2 wh-48 bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center">
+                  <i class="material-icons-outlined">notifications</i>
+                </a>
+                <h3 class="mb-0">{{count_not_approved}}</h3>
+                <p class="mb-0">RAP con No Aprobado</p>
+              </div>
+              <div class="vr"></div>
+              <div class="d-flex flex-column align-items-center justify-content-center gap-2">
+                <a href="javascript:;"
+                  class="mb-2 wh-48 bg-success bg-opacity-10 text-warning rounded-circle d-flex align-items-center justify-content-center">
+                  <i class="material-icons-outlined">checklist</i>
+                </a>
+                <h3 class="mb-0">0</h3>
+                <p class="mb-0">Resultados por evaluar</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!--end row-->
+    {% if titular %}
+    <div class="row">
+      <div class="col-12">
+        <div class="card p-2" role="alert">
+          <h5 class="fw-bold">Instructor titular</h5>
+          <span my-2>Este trimestre eres instructor titular en las fichas:</span>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr class="m-0">
+                  <th scope="col">Ficha</th>
+                  <th scope="col">Programa</th>
+                  <th scope="col">Trimestre</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for t in titular %}
+                <tr>
+                  <td>{{t.ficha}}</td>
+                  <td>{{t.programa}}</td>
+                  <td>{{t.trimestre}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+      <div class="col-12 col-xl-4">
+        <div class="card w-100 rounded-4">
+          <div class="card-body">
+            <div class="d-flex align-items-start justify-content-between mb-3">
+              <div class="">
+                <h5 class="mb-0 fw-bold">Aprendices con No Aprobados</h5>
+              </div>
+            </div>
+            {% for a in not_approved.values %}
+            <div class="d-flex flex-column gap-4 mb-3">
+                <div class="d-flex align-items-center gap-4">
+                  <div class="d-flex align-items-center gap-3 flex-grow-1 flex-shrink-0">
+                    <div class="">
+                      <h6 class="mb-0 fw-bold">{{ a.nombre_completo }}</h6>
+                      <p class="mb-0">{{a.documento}}</p>
+                    </div>
+                  </div>
+                  <div class="text-primary">
+                    {{a.ficha}}
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-4">
+        <div class="card rounded-4">
+          <div class="card-body">
+            <div class="d-flex align-items-start justify-content-between mb-3">
+              <div class="">
+                <h5 class="mb-0 fw-bold">Resultados por evaluar</h5>
+              </div>
+            </div>
+            <div class="">
+              <div class="d-flex flex-column gap-4">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="flex-grow-1">
+                    <h6 class="mb-0">Codificar el software de acuerdo con el diseño establecido.</h6>
+                    <p class="mb-0">Python (Machine Learning + Big Data)</p>
+                  </div>
+                  <div class="d-flex align-items-center gap-1">
+                    <h6 class="mb-0 text-primary">2478965</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-xl-4 d-flex">
+        <div class="card w-100 rounded-4">
+          <div class="card-body">
+            <div class="d-flex align-items-start justify-content-between mb-3">
+              <div class="">
+                <h5 class="mb-0 fw-bold">Aprendices para citar a comité</h5>
+              </div>
+            </div>
+            <div class="d-flex flex-column gap-4">
+              <div class="d-flex align-items-center gap-4">
+                <div class="d-flex align-items-center gap-3 flex-grow-1 flex-shrink-0">
+                  <div class="">
+                    <h6 class="mb-0 fw-bold">Marcela Pérez</h6>
+                    <p class="mb-0">1555567890</p>
+                  </div>
+                </div>
+                <div class="text-primary">
+                  2546789
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!--end row-->
+  </div>
+</main>
+<!--end main wrapper-->
+{% endblock %}

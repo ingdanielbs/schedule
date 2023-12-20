@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load dict_helpers %}
+{% block content %}
+
+<div class="container-fluid my-5">
+    <div class="row">
+        <div class="col-10 mx-auto">
+            <div class="card my-5 p-4 rounded-4">
+                <div class="table-responsive">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <a class="mb-3" href="{% url 'schedule_down_instructor' %}"><img src="{% static 'images/export-excel-35.png' %}" alt=""></a>                        
+                        <p class="fs-6 ml-4"> <span class="fw-bold ml-4">Trimestre académico:</span> {{trimestre}}</p>                        
+                    </div>                
+                    <table class="table table-bordered">                        
+                        <tr>
+                            <th></th>
+                            {% for day in days %}
+                            <th style="background-color: #C5EAE8;">{{ day }}</th>
+                            {% endfor %}
+                        </tr>
+                        {% for hour, hour_f in hours_combined %}
+                        <tr>
+                            <td class="fw-bold">{{ hour_f }}</td>
+                            {% for day in days %}
+                            <td>
+                                {% for clase in schedule.horario|get_item:day|get_item:hour %}
+                                <small class="d-block text-center fw-bold">{{ clase.NOMBRE_COMPETENCIA }}</small>
+                                <small class="d-block text-center">{{ clase.FICHA }}</small>
+                                <small class="d-block text-center">{{ clase.AMB }}</small>
+                                {% endfor %}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+<!-- {% load dict_helpers %} -->
+{% block content %}
+
+<div class="container-fluid my-5">
+    <div class="row">
+        <div class="col-10 mx-auto">
+            <div class="card my-5 p-4 rounded-4">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-9 mb-3">
+                            <label for="" class="form-label fw-bold">Numero de la ficha</label>
+                            <input type="text" class="form-control" name="ficha" id="" aria-describedby="helpId" placeholder="Ingresa el numero de la ficha"/>                        
+                            <small class="text-danger">{{message}}</small>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary mt-4"> Consultar </button>
+                        </div>                        
+                    </div>                    
+                </form>
+                {% if schedule %}
+                <div class="table-responsive mt-4">
+                    <table class="table table-bordered">
+                        <p class="fs-6"> <span class="fw-bold">Ficha:</span> {{schedule.ficha}}</p>
+                        <p class="fs-6"> <span class="fw-bold">Trimestre académico:</span> {{trimestre}}</p>
+                        <a class="btn btn-success col-md-3 col-xl-3 mb-4"
+                            href="{% url 'course_schedule_down' %}">Descargar horario</a>
+                        <tr>
+                            <th></th>
+                            {% for day in days %}
+                            <th style="background-color: #C5EAE8;">{{ day }}</th>
+                            {% endfor %}
+                        </tr>
+                        {% for hour, hour_f in hours_combined %}
+                        <tr>
+                            <td class="fw-bold">{{ hour_f }}</td>
+                            {% for day in days %}
+                            <td>
+                                {% for clase in schedule.horario|get_item:day|get_item:hour %}
+                                <small class="d-block text-center fw-bold">{{ clase.NOMBRE_COMPETENCIA }}</small>
+                                <small class="d-block text-center">{{ clase.INSTRUCTOR }}</small>
+                                <small class="d-block text-center">{{ clase.AMB }}</small>
+                                {% endfor %}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+
+                    </table>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

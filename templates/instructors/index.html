@@ -1,0 +1,132 @@
+{% load static %}
+<!doctype html>
+<html lang="es" data-bs-theme="light">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SARA</title>
+    <!--favicon-->
+    <link rel="icon" href="{% static 'images/favicon-32x32.png' %}" type="image/png">
+
+    <!--plugins-->
+    <link href="{% static 'plugins/perfect-scrollbar/css/perfect-scrollbar.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/metismenu/metisMenu.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/metismenu/mm-vertical.css' %}">
+    <!--bootstrap css-->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons+Outlined" rel="stylesheet">
+    <!--main css-->
+    <link href="{% static 'css/bootstrap-extended.css' %}" rel="stylesheet">
+    <link href="{% static 'sass/main.css' %}" rel="stylesheet">
+    <link href="{% static 'sass/dark-theme.css' %}" rel="stylesheet">
+    <link href="{% static 'sass/responsive.css' %}" rel="stylesheet">
+
+    <style>
+        #wave {
+            animation: moveWave 4s linear infinite alternate;
+            transform-origin: center bottom;
+        }
+
+        @keyframes moveWave {
+            0% {
+                transform: scaleY(1);
+            }
+
+            50% {
+                transform: scaleY(0.7);
+            }
+
+            100% {
+                transform: scaleY(1);
+            }
+        }
+
+        #logo-sena {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            margin: 20px;
+            /* Puedes ajustar este valor para el margen */
+            width: 20%;
+            /* Cambia el tamaño de la imagen según lo necesario */
+            height: auto;
+            /* Mantén la proporción al cambiar el tamaño */
+            z-index: 999;
+            /* Asegúrate de que esté encima de otros elementos si es necesario */
+        }
+
+        @media (max-width: 767px) {
+            #wave {
+                display: none;
+                /* Ocultar el SVG en dispositivos móviles si es necesario */
+            }
+
+            #logo-sena {
+                position: relative;
+                /* Cambiar la posición a relativa */
+                width: 50%;
+                /* Ajustar el tamaño de la imagen según sea necesario */
+                margin: 0 auto;
+                /* Centrar horizontalmente */
+                display: block;
+                /* Asegurarse de que sea un elemento de bloque */
+                z-index: 9999;
+                /* Ajustar el z-index si es necesario */
+            }
+        }
+    </style>
+
+</head>
+
+<body class="bg-login">
+    <!--authentication-->
+    <div class="container-fluid mt-5">
+        <div class="row">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5 col-xxl-4 mx-auto">
+                <div class="card rounded-4">
+                    <div class="card-body p-5">
+                        <img src="{% static 'images/logo1.png' %}" class="mb-4" width="145" alt="">
+                        <h4 class="fw-bold text-center">Iniciar sesión</h4>
+                        <div class="form-body my-4">
+                            <form class="row g-3" action="" method="POST">
+                                {% csrf_token %}
+                                <div class="col-12 mb-3">
+                                    <label for="document" class="form-label">Documento</label>
+                                    <input type="number" class="form-control" id="username" name="username"
+                                        placeholder="Ingrese su documento de identidad">
+                                    {% if message %}
+                                    <small class="text-danger">{{ message }}</small>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-md-6 ">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked">
+                                        <label class="form-check-label" for="flexSwitchCheckChecked">Recuérdame</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary">Ingresar</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div><!--end row-->
+        </div>
+    </div>
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 215" id="wave">
+        <path fill="#C5EAE8" fill-opacity="1"
+            d="M0,224L80,240C160,256,320,288,480,261.3C640,235,800,149,960,106.7C1120,64,1280,64,1360,64L1440,64L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z">
+        </path>
+    </svg>
+    <img id="logo-sena" src="{% static 'images/logo-sena-dash.png' %}" alt="">
+</body>
+
+</html>
