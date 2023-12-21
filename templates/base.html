@@ -1,5 +1,3 @@
-{% load static %}
-
 <!DOCTYPE html>
 <html lang="es" data-bs-theme="light">
 
@@ -8,24 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SARA</title>
     <!--favicon-->
-    <link rel="icon" href="{% static 'images/favicon-32x32.png' %}" type="image/png">
+    <link rel="icon" href="{{ url_for( 'static', filename= 'images/favicon-32x32.png' ) }}" type="image/png">
 
     <!--plugins-->
-    <link href="{% static 'plugins/perfect-scrollbar/css/perfect-scrollbar.css' %}" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{% static 'plugins/metismenu/metisMenu.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'plugins/metismenu/mm-vertical.css' %}">
+    <link href="{{ url_for( 'static', filename= 'plugins/perfect-scrollbar/css/perfect-scrollbar.css' ) }}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename= 'plugins/metismenu/metisMenu.min.css' ) }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename= 'plugins/metismenu/mm-vertical.css' ) }}">
     <!--bootstrap css-->
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{{ url_for( 'static', filename= 'css/bootstrap.min.css' ) }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Material+Icons+Outlined" rel="stylesheet">
     <!--main css-->
-    <link href="{% static 'css/bootstrap-extended.css' %}" rel="stylesheet">
-    <link href="{% static 'sass/main.css' %}" rel="stylesheet">
-    <link href="{% static 'sass/dark-theme.css' %}" rel="stylesheet">
-    <link href="{% static 'sass/semi-dark.css' %}" rel="stylesheet">
-    <link href="{% static 'sass/bordered-theme.css' %}" rel="stylesheet">
-    <link href="{% static 'sass/responsive.css' %}" rel="stylesheet">
-    <link href="{% static 'plugins/datatable/css/dataTables.bootstrap5.min.css' %}" rel="stylesheet" />
+    <link href="{{ url_for( 'static', filename= 'css/bootstrap-extended.css' ) }}" rel="stylesheet">
+    <link href="{{ url_for( 'static', filename= 'sass/main.css' ) }}" rel="stylesheet">
+    <link href="{{ url_for( 'static', filename= 'sass/dark-theme.css' ) }}" rel="stylesheet">
+    <link href="{{ url_for( 'static', filename= 'sass/semi-dark.css' ) }}" rel="stylesheet">
+    <link href="{{ url_for( 'static', filename= 'sass/bordered-theme.css' ) }}" rel="stylesheet">
+    <link href="{{ url_for( 'static', filename= 'sass/responsive.css' ) }}" rel="stylesheet">
+    <link href="{{ url_for( 'static', filename= 'plugins/datatable/css/dataTables.bootstrap5.min.css' ) }}" rel="stylesheet" />
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
   
@@ -110,10 +108,10 @@
         </div>
         <div class="quick-menu">
             <nav class="nav flex-column gap-1">
-                <a class="nav-link" href="{% url 'dashboard' %}" title="Dashboard"><i class="material-icons-outlined">home</i></a>
-                <a class="nav-link" href="{% url 'schedule' %}" title="Horario Instructor"><i class="material-icons-outlined">event</i></a>
-                <a class="nav-link" href="{% url 'course_schedule' %}"><i class="material-icons-outlined" title="Horario Fichas">school</i></a>
-                <a class="nav-link" href="{% url 'complaints' %}"><i class="material-icons-outlined" title="Consulta de quejas">manage_search</i></a>
+                <a class="nav-link" href="{{ url_for('dashboard') }}" title="Dashboard"><i class="material-icons-outlined">home</i></a>
+                <a class="nav-link" href="{{ url_for('schedule') }}" title="Horario Instructor"><i class="material-icons-outlined">event</i></a>
+                <a class="nav-link" href="{{ url_for('course_schedule') }}"><i class="material-icons-outlined" title="Horario Fichas">school</i></a>
+                <a class="nav-link" href="{{ url_for('complaints') }}"><i class="material-icons-outlined" title="Consulta de quejas">manage_search</i></a>
                 <a class="nav-link" href="ecommerce-products.html"><i class="material-icons-outlined" title="Actualizar juicios">update</i></a>
                 <a class="nav-link" href="javascript:;"><i class="material-icons-outlined">poll</i></a>
             </nav>
@@ -162,12 +160,12 @@
       <div class="user-wrapper">
         <div class="text-center p-3 bg-light rounded">
           <img src="https://placehold.co/110x110" class="rounded-circle p-1 shadow mb-3" width="120" height="120" alt="">
-          <h5 class="user-name mb-0 fw-bold">{{instructor.name}}</h5>
+          <h5 class="user-name mb-0 fw-bold">{{user.name}}</h5>
           <p class="mb-0">Instructor</p>
         </div>
         <div class="list-group list-group-flush mt-3 profil-menu fw-bold">
           
-          <a href="{% url 'instructors' %}"
+          <a href="{{ url_for('instructors') }}"
             class="list-group-item list-group-item-action d-flex align-items-center gap-2 border-bottom"><i
               class="material-icons-outlined">power_settings_new</i>Cerrar sesión</a>
         </div>
@@ -188,24 +186,24 @@
 
     {% endblock %}
     <!--bootstrap js-->
-    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{{ url_for( 'static', filename = 'js/bootstrap.bundle.min.js' ) }}"></script>
 
     <!--plugins-->
-    <script src="{% static 'js/jquery.min.js' %} "></script>
+    <script src="{{ url_for( 'static', filename = 'js/jquery.min.js' ) }} "></script>
     <!--plugins-->
-    <script src="{% static 'plugins/perfect-scrollbar/js/perfect-scrollbar.js' %}"></script>
-    <script src="{% static 'plugins/metismenu/metisMenu.min.js' %}"></script>
-    <script src="{% static 'plugins/apexchart/apexcharts.min.js' %}"></script>
-    <script src="{% static 'js/index.js' %}"></script>
-    <script src="{% static 'plugins/peity/jquery.peity.min.js' %}"></script>
+    <script src="{{ url_for( 'static', filename = 'plugins/perfect-scrollbar/js/perfect-scrollbar.js' ) }}"></script>
+    <script src="{{ url_for( 'static', filename = 'plugins/metismenu/metisMenu.min.js' ) }}"></script>
+    <script src="{{ url_for( 'static', filename = 'plugins/apexchart/apexcharts.min.js' ) }}"></script>
+    <script src="{{ url_for( 'static', filename = 'js/index.js' ) }}"></script>
+    <script src="{{ url_for( 'static', filename = 'plugins/peity/jquery.peity.min.js' ) }}"></script>
         
-    <script src="{% static 'plugins/datatable/js/jquery.dataTables.min.js' %}"></script>
-	<script src="{% static 'plugins/datatable/js/dataTables.bootstrap5.min.js' %}"></script>
+    <script src="{{ url_for( 'static', filename = 'plugins/datatable/js/jquery.dataTables.min.js' ) }}"></script>
+	<script src="{{ url_for( 'static', filename = 'plugins/datatable/js/dataTables.bootstrap5.min.js' ) }}"></script>
 
     <script>
         $(".data-attributes span").peity("donut")
     </script>
-    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{{ url_for( 'static', filename = 'js/main.js' ) }}"></script>
 </body>
 
 </html>

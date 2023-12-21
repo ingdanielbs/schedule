@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load static %}
 
 {% block content %}
 
@@ -15,17 +14,17 @@
           <div class="card-body">
             <div class="d-flex align-items-center gap-3 mb-2">
               <div class="m-4">
-                {% if instructor.gender == 'M' %}
+                {% if user.gender == 'M' %}
                 <h2 class="mb-0">Bienvenido</h2>
                 {% else %}
                 <h2 class="mb-0">Bienvenida</h2>
                 {% endif %}
-                <h6 class="mb-0 text-muted">{{ instructor.name}}</h6>
+                <h6 class="mb-0 text-muted">{{ user.name }}</h6>
               </div>
-              {% if instructor.gender == 'M' %}
-              <img width="20%" src="{% static 'images/user-dash.png' %}" alt="">
+              {% if user.gender == 'M' %}
+              <img width="20%" src="{{ url_for( 'static', filename = 'images/user-dash.png') }}" alt="">
               {% else %}
-              <img width="20%" src="{% static 'images/user-dash-woman.png' %}" alt="">
+              <img width="20%" src="{{ url_for( 'static', filename = 'images/user-dash-woman.png') }}" alt="">
               {% endif %}
             </div>
           </div>
@@ -40,7 +39,7 @@
                   class="mb-2 wh-48 bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center">
                   <i class="material-icons-outlined">layers</i>
                 </a>
-                <h3 class="mb-0">{{quantity_groups}}</h3>
+                <h3 class="mb-0">{{ quantity_groups }}</h3>
                 <p class="mb-0">Fichas</p>
               </div>
               <div class="vr"></div>
@@ -49,7 +48,7 @@
                   class="mb-2 wh-48 bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center">
                   <i class="material-icons-outlined">group</i>
                 </a>
-                <h3 class="mb-0">{{hours}}</h3>
+                <h3 class="mb-0">{{ hours }}</h3>
                 <p class="mb-0">Horas semanales</p>
               </div>
               <div class="vr"></div>
@@ -58,7 +57,7 @@
                   class="mb-2 wh-48 bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center">
                   <i class="material-icons-outlined">notifications</i>
                 </a>
-                <h3 class="mb-0">{{count_not_approved}}</h3>
+                <h3 class="mb-0">0</h3>
                 <p class="mb-0">RAP con No Aprobado</p>
               </div>
               <div class="vr"></div>
@@ -118,21 +117,21 @@
                 <h5 class="mb-0 fw-bold">Aprendices con No Aprobados</h5>
               </div>
             </div>
-            {% for a in not_approved.values %}
+            
             <div class="d-flex flex-column gap-4 mb-3">
                 <div class="d-flex align-items-center gap-4">
                   <div class="d-flex align-items-center gap-3 flex-grow-1 flex-shrink-0">
                     <div class="">
-                      <h6 class="mb-0 fw-bold">{{ a.nombre_completo }}</h6>
-                      <p class="mb-0">{{a.documento}}</p>
+                      <h6 class="mb-0 fw-bold"></h6>
+                      <p class="mb-0"></p>
                     </div>
                   </div>
                   <div class="text-primary">
-                    {{a.ficha}}
+                    
                   </div>
                 </div>
               </div>
-              {% endfor %}
+              
           </div>
         </div>
       </div>

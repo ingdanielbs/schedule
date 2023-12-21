@@ -95,8 +95,8 @@
                                     <label for="document" class="form-label">Documento</label>
                                     <input type="number" class="form-control" id="username" name="username"
                                         placeholder="Ingrese su documento de identidad">
-                                    {% if message %}
-                                    <small class="text-danger">{{ message }}</small>
+                                    {% if error %}
+                                    <small class="text-danger">{{ error }}</small>
                                     {% endif %}
                                 </div>
 
