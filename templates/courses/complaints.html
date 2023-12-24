@@ -1,7 +1,39 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block content %}
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.2/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var table = $('#example2').DataTable(
+            {
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ registros por página",
+                    "zeroRecords": "No hay registros",
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros disponibles",
+                    "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                    "search": "Buscar:",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                }
+            },
+            {
+				lengthChange: false,
+				buttons: [ 'copy', 'excel', 'pdf', 'print']
+			}
+        );
+        table.buttons().container()
+				.appendTo( '#example2_wrapper .col-md-6:eq(0)' );
+    });
+</script>
+
 
 <div class="container-fluid my-5">
     <div class="row">
@@ -13,8 +45,8 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Fecha</th>
-                                    <th scope="col">Nombre del instructor</th>
-                                    <th scope="col">Programa de formación</th>
+                                    <th scope="col">Instructor</th>
+                                    <th scope="col">Programa</th>
                                     <th scope="col">Ficha</th>
                                     <th scope="col">Aprendiz</th>
                                     <th scope="col">Tipo Doc.</th>

@@ -1,5 +1,6 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, send_file
+from courses.complaint import complaints_students
 from courses.horario_courses import get_schedule_course, generar_excel_course
 
 from ingreso.login import loguear
@@ -107,7 +108,10 @@ def schedule_course_down():
         
 @app.route("/complaints")
 def complaints():
-    return render_template("instructors/complaints.html")
+    if "username" in session:
+        user = session["user"]
+        comp_students= complaints_students()
+    return render_template("courses/complaints.html", user=user, comp_students=comp_students)
 
 @app.route("/instructors")
 def instructors():
