@@ -1,10 +1,13 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, send_file
+from courses.competences import join_files
 from courses.complaint import complaints_students
 from courses.horario_courses import get_schedule_course, generar_excel_course
 
 from ingreso.login import loguear
 from instructors.horario import get_sum_horas, get_cant_fichas, get_fichas_titular, cant_no_aprobados, not_approved_students, get_horario_i, generar_excel
+
+import pandas as pd
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/' 
@@ -41,7 +44,8 @@ def dashboard():
         titular = get_fichas_titular(user['name'], trimestre_academico)            
         hours = get_sum_horas(user['name'], trimestre_academico)
         quantity_groups = get_cant_fichas(user['name'], trimestre_academico)
-        return render_template("instructors/dashboard.html", user=user, hours=hours, quantity_groups=quantity_groups, titular=titular)
+        quantity_no_approved = len(cant_no_aprobados(str(user['document'])))    
+        return render_template("instructors/dashboard.html", user=user, hours=hours, quantity_groups=quantity_groups, titular=titular, quantity_no_approved=quantity_no_approved, trimestre=trimestre_academico)
     else:
         return redirect(url_for("login"))
 
@@ -50,7 +54,6 @@ def schedule():
     if "username" in session:
         user = session["user"]
         schedule = get_horario_i(user['name'], trimestre_academico)    
-        print(schedule)
         days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
         hours = ['h6_7', 'h7_8', 'h8_9', 'h9_10', 'h10_11', 'h11_12', 'h12_13', 'h13_14', 'h14_15', 'h15_16', 'h16_17', 'h17_18', 'h18_19', 'h19_20', 'h20_21', 'h21_22']
         hours_f = ['6:00 - 7:00', '7:00 - 8:00', '8:00 - 9:00', '9:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00', '20:00 - 21:00', '21:00 - 22:00']
@@ -82,7 +85,6 @@ def course_schedule():
             ficha = request.form["ficha"]
             if ficha:
                 schedule_course = get_schedule_course(ficha)
-                print(schedule_course)
                 days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
                 hours = ['h6_7', 'h7_8', 'h8_9', 'h9_10', 'h10_11', 'h11_12', 'h12_13', 'h13_14', 'h14_15', 'h15_16', 'h16_17', 'h17_18', 'h18_19', 'h19_20', 'h20_21', 'h21_22']
                 hours_f = ['6:00 - 7:00', '7:00 - 8:00', '8:00 - 9:00', '9:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00', '20:00 - 21:00', '21:00 - 22:00']
@@ -116,6 +118,18 @@ def complaints():
 @app.route("/instructors")
 def instructors():
     return render_template("instructors/instructors.html")
+
+@app.route("/upload_competences", methods=["GET", "POST"])
+def upload_competences():
+    if "username" in session:
+        user = session["user"]
+        join_files()
+        if request.method == "POST":
+            code_course = request.form["code_course"]
+            file = request.files["file"]           
+            file.save(os.path.join("static/course-competences", code_course + ".xls"))
+            return redirect(url_for("upload_competences"))            
+        return render_template("courses/uploadCompetences.html", user=user)
 
 @app.errorhandler(404)
 def page_not_found(e):

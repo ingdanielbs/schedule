@@ -218,15 +218,13 @@ def generar_excel(schedule, nombre_archivo):
 
 """ generar_excel(get_horario_i('DANIEL DAVID BENAVIDES SÁNCHEZ'), 'horario.xlsx') """
 
-def cant_no_aprobados(document):    
-    
-    """ filtered_competences = CourseCompetence.objects.filter(
-    evaluationJudgment='NO APROBADO',
-    status__in=['EN FORMACION', 'CONDICIONADO'],    
-    ) """
-    filtered_competences = [comp for comp in filtered_competences if comp.official.split(' ')[1] == document]
-
-    return filtered_competences 
+def cant_no_aprobados(document):  
+    #leer archivo de competencias.json
+    with open('static/competencias.json', 'r', encoding='utf-8') as archivo_json:
+        competencias = json.load(archivo_json)        
+        not_approved = [item for item in competencias if item['juicio'] == 'NO APROBADO' and item['estado'] in ['EN FORMACION', 'CONDICIONADO'] and item['funcionario'].split(' ')[1] == document]
+        
+    return not_approved    
     
 def not_approved_students(not_approved):    
     students = {}
