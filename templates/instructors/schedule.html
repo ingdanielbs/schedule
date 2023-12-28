@@ -8,9 +8,16 @@
             <div class="card my-5 p-4 rounded-4">
                 <div class="table-responsive">
                     <div class="d-flex align-items-center justify-content-between">
-                        <a class="mb-3 custom-tooltip" href="{{ url_for('schedule_down') }}">                            
+                        <div>
+                            <a class="mb-3 custom-tooltip" href="{{ url_for('schedule_down') }}">                            
                                 <span class="tooltip-text">Descargar horario</span>
-                            <img src="{{ url_for( 'static', filename = 'images/export-excel-35.png' ) }}" alt=""></a>                        
+                                <img src="{{ url_for( 'static', filename = 'images/export-excel-35.png' ) }}" alt=""></a>
+                            <a type="button" class="mb-3 mx-2 custom-tooltip" data-bs-toggle="modal" data-bs-target="#modalRaps">
+                                <span class="tooltip-text">Detalle RAPS</span>
+                                <img src="{{ url_for( 'static', filename = 'images/rap1-icon-35.png' ) }}" alt="">
+                            </a>                                                    
+                            
+                        </div>
                         <p class="fs-6 ml-4"> <span class="fw-bold ml-4">Trimestre académico:</span> {{trimestre}}</p>                        
                     </div>                
                     <table class="table table-bordered">                        
@@ -43,5 +50,50 @@
 </div>
 
 
+<div class="modal fade" id="modalRaps" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleId">
+                    Detalle Resultados de Aprendizajes
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Ficha</th>
+                                <th>Trimestre</th>
+                                <th>Programa</th>
+                                <th>Palabra clave</th>
+                                <th>Norma de Competencia (Sofíaplus) </th>
+                                <th>Compentencia</th>
+                                <th>RAP</th>                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for detalle in schedule.detalles['key'] %}
+                            <tr>
+                                <td>{{ detalle[0].FICHA }}</td>
+                                <td>{{ detalle[0].TRIMESTRE }}</td>
+                                <td>{{ detalle[0].PROGRAMA }}</td>
+                                <td>{{ detalle[0].PALABRA_CLAVE }}</td>
+                                <td>{{ detalle[0].NCL }}</td>
+                                <td>{{ detalle[0].COMPETENCIA }}</td>
+                                <td>{{ detalle[0].RAP }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>                
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

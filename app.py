@@ -38,9 +38,9 @@ def logout():
 def dashboard():
     if "username" in session:
         user = session["user"]
-        titular = get_fichas_titular(user['name'])            
-        hours = get_sum_horas(user['name'])
-        quantity_groups = get_cant_fichas(user['name'])
+        titular = get_fichas_titular(user['name'], trimestre_academico)            
+        hours = get_sum_horas(user['name'], trimestre_academico)
+        quantity_groups = get_cant_fichas(user['name'], trimestre_academico)
         return render_template("instructors/dashboard.html", user=user, hours=hours, quantity_groups=quantity_groups, titular=titular)
     else:
         return redirect(url_for("login"))
@@ -49,7 +49,7 @@ def dashboard():
 def schedule():
     if "username" in session:
         user = session["user"]
-        schedule = get_horario_i(user['name'])    
+        schedule = get_horario_i(user['name'], trimestre_academico)    
         print(schedule)
         days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
         hours = ['h6_7', 'h7_8', 'h8_9', 'h9_10', 'h10_11', 'h11_12', 'h12_13', 'h13_14', 'h14_15', 'h15_16', 'h16_17', 'h17_18', 'h18_19', 'h19_20', 'h20_21', 'h21_22']
@@ -63,7 +63,7 @@ def schedule():
 def schedule_down():
     if "username" in session:
         user = session["user"]
-        generar_excel(get_horario_i(user['name']), f"Horario {trimestre_academico} - {user['name']}.xlsx")
+        generar_excel(get_horario_i(user['name'], trimestre_academico), f"Horario {trimestre_academico} - {user['name']}.xlsx")
 
         file_path = f"static/schedule-instructores/Horario {trimestre_academico} - {user['name']}.xlsx"        
         if os.path.exists(file_path):
