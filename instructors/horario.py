@@ -136,17 +136,16 @@ def generar_excel(schedule, nombre_archivo):
     hours = ['6:00 - 7:00', '7:00 - 8:00', '8:00 - 9:00', '9:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00', '20:00 - 21:00', '21:00 - 22:00']
 
     for hour in hours:
-        data['Hora'].append(hour)  # Agregar la hora al DataFrame
+        data['Hora'].append(hour)
         for dia, horarios in schedule['horario'].items():
             classes_info = []
             for hora, clases in horarios.items():
-                if hora == f"h{hours.index(hour) + 6}_{hours.index(hour) + 7}":  # Comprobar si la hora coincide
+                if hora == f"h{hours.index(hour) + 6}_{hours.index(hour) + 7}":
                     for clase in clases:
-                        # Obtener la información de FICHA, AMB y el nombre de la competencia
                         class_info = f"{clase['NOMBRE_COMPETENCIA']} \n {clase['FICHA']} \n {clase['AMB']}"
                         classes_info.append(class_info)
                     break
-            data[dia].append(", ".join(classes_info) if classes_info else '')  # Si no hay clases, añadir cadena vacía
+            data[dia].append(", ".join(classes_info) if classes_info else '')
 
     df = pd.DataFrame(data)
     
@@ -211,7 +210,43 @@ def generar_excel(schedule, nombre_archivo):
     for row in hoja['A8:G25']:
         for cell in row:
             cell.border = thin_border
-        
+    # Trimestre	Programa	Palabra clave	Norma de Competencia (Sofíaplus)	Compentencia	RAP        
+    hoja['A27'] = 'Ficha'
+    hoja['B27'] = 'Trimestre'
+    hoja['C27'] = 'Programa'
+    hoja['D27'] = 'Palabra clave'
+    hoja['E27'] = 'Norma de Competencia (Sofíaplus)'
+    hoja['F27'] = 'Competencia'
+    hoja['G27'] = 'RAP'
+    details = schedule['detalles']
+    
+    row_num = 28
+    for key, detail_list in details.items():
+        for detail in detail_list:
+            for item in detail:
+                hoja[f'A{row_num}'] = item['FICHA']
+                hoja[f'A{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+                hoja[f'B{row_num}'] = item['TRIMESTRE']
+                hoja[f'B{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+                hoja[f'C{row_num}'] = item['PROGRAMA']
+                hoja[f'C{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+                hoja[f'D{row_num}'] = item['PALABRA_CLAVE']
+                hoja[f'D{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+                hoja[f'E{row_num}'] = item['NCL']
+                hoja[f'E{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+                hoja[f'F{row_num}'] = item['COMPETENCIA']
+                hoja[f'F{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+                hoja[f'G{row_num}'] = item['RAP']
+                hoja[f'G{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+                row_num += 1
+    rango_celdas = hoja['A27:G27']
+    
+    color_fondo = PatternFill(start_color='C5EAE8', end_color='C5EAE8', fill_type='solid')
+    
+    for row in rango_celdas:
+        for cell in row:
+            cell.fill = color_fondo
+            cell.font = cell.font.copy(bold=True)
     # Guardar el archivo Excel
     workbook.save(f'static/schedule-instructores/{nombre_archivo}')
 
