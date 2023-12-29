@@ -227,16 +227,9 @@ def cant_no_aprobados(document):
     return not_approved    
     
 def not_approved_students(not_approved):    
-    students = {}
-    #buscar el por el document_number de not_approved en la tabla courses_student y traer el nombre completo del aprendiz, el documento y la ficha
-    """ for item in not_approved:
-        student = CourseStudent.objects.filter(documentNumber = item.documentNumber).first()
-        if student:
-            students['h'+ item.documentNumber] = {
-                'nombre_completo': student.name + ' ' + student.lastName,
-                'documento': item.documentNumber,
-                'ficha': item.course_id,               
-            } """
+    students = {}    
+    for item in not_approved:
+        students[item['nmero_documento']] = {'nombre_completo': item['nombre'] + ' ' + item['apellidos'], 'documento': item['nmero_documento'], 'ficha': item['ficha']}   
     
     return students
         

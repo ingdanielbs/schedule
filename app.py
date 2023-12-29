@@ -44,8 +44,9 @@ def dashboard():
         titular = get_fichas_titular(user['name'], trimestre_academico)            
         hours = get_sum_horas(user['name'], trimestre_academico)
         quantity_groups = get_cant_fichas(user['name'], trimestre_academico)
-        quantity_no_approved = len(cant_no_aprobados(str(user['document'])))    
-        return render_template("instructors/dashboard.html", user=user, hours=hours, quantity_groups=quantity_groups, titular=titular, quantity_no_approved=quantity_no_approved, trimestre=trimestre_academico)
+        quantity_no_approved = len(cant_no_aprobados(str(user['document']))) 
+        students_not_approved = not_approved_students(cant_no_aprobados(str(user['document'])))
+        return render_template("instructors/dashboard.html", user=user, hours=hours, quantity_groups=quantity_groups, titular=titular, quantity_no_approved=quantity_no_approved, trimestre=trimestre_academico, students_not_approved=students_not_approved)
     else:
         return redirect(url_for("login"))
 

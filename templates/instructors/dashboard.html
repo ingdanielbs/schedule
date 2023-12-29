@@ -118,21 +118,19 @@
                 <h5 class="mb-0 fw-bold">Aprendices con No Aprobados</h5>
               </div>
             </div>
-            
+            {% for student in students_not_approved.values() %}
             <div class="d-flex flex-column gap-4 mb-3">
-                <div class="d-flex align-items-center gap-4">
-                  <div class="d-flex align-items-center gap-3 flex-grow-1 flex-shrink-0">
-                    <div class="">
-                      <h6 class="mb-0 fw-bold"></h6>
-                      <p class="mb-0"></p>
-                    </div>
-                  </div>
-                  <div class="text-primary">
-                    
+              <div class="d-flex align-items-center gap-4">
+                <div class="d-flex align-items-center gap-3 flex-grow-1 flex-shrink-0">
+                  <div class="">
+                    <h6 class="mb-0 fw-bold">{{ student.nombre_completo }}</h6>
+                    <p class="mb-0">{{ student.documento }}</p>
                   </div>
                 </div>
+                <div class="text-primary">{{ student.ficha }}</div>
               </div>
-              
+            </div>
+            {% endfor %}
           </div>
         </div>
       </div>
