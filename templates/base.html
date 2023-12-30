@@ -113,14 +113,14 @@
         </div>
         <div class="quick-menu">
             <nav class="nav flex-column gap-1">
-                <a class="nav-link custom-tooltip" href="{{ url_for('dashboard') }}" title="Dashboard">
+                <a class="nav-link custom-tooltip" href="{{ url_for('dashboard') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard">                    
                     <i class="material-icons-outlined">home</i></a>
-                <a class="nav-link" href="{{ url_for('schedule') }}" title="Horario Instructor">
+                <a class="nav-link" href="{{ url_for('schedule') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Horario Instructor">
                     <i class="material-icons-outlined">event</i></a>
-                <a class="nav-link" href="{{ url_for('course_schedule') }}"><i class="material-icons-outlined"
-                        title="Horario Fichas">school</i></a>
-                <a class="nav-link" href="{{ url_for('complaints') }}" title="Quejas académicas"><i
-                        class="material-icons-outlined" title="Consulta de quejas">manage_search</i></a>
+                <a class="nav-link" href="{{ url_for('course_schedule') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Horario Fichas">
+                    <i class="material-icons-outlined">school</i></a>
+                <a class="nav-link" href="{{ url_for('complaints') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Quejas académicas"><i
+                        class="material-icons-outlined">manage_search</i></a>
                 <!-- <a class="nav-link" href="ecommerce-products.html"><i class="material-icons-outlined" title="Actualizar juicios">update</i></a> -->
                 <!-- <a class="nav-link" href="javascript:;"><i class="material-icons-outlined">poll</i></a> -->
             </nav>
@@ -144,8 +144,8 @@
         <div class="offcanvas-body">
             <nav class="sidebar-nav">
                 <ul class="metismenu" id="sidenav">
-                    <a class="nav-link" href="{{ url_for('dashboard') }}"><i
-                            class="material-icons-outlined mx-2">home</i>Dashboard</a>
+                    <a class="nav-link" href="{{ url_for('dashboard') }}">
+                        <i class="material-icons-outlined mx-2">home</i>Dashboard</a>
                     <a class="nav-link" href="{{ url_for('schedule') }}"><i
                             class="material-icons-outlined mx-2">event</i>Horario instructor</a>
                     <a class="nav-link" href="{{ url_for('course_schedule') }}"><i
@@ -209,6 +209,12 @@
         $(".data-attributes span").peity("donut")
     </script>
     <script src="{{ url_for( 'static', filename = 'js/main.js' ) }}"></script>
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
 </body>
 
 </html>

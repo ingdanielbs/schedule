@@ -5,16 +5,16 @@
 
 .custom-tooltip .tooltip-text {
     visibility: hidden;
-    width: 200px;
+    width: 150px;
     background-color: #C5EAE8;
     color: #404040;
     text-align: center;
-    padding: 5px 2px;
+    padding: 2px 2px;
     border-radius: 6px;
 
     position: absolute;
     z-index: 1;
-    bottom: 10%;
+    bottom: 30%;
     /* Position the tooltip above the link */
     left: 100%;
     /* Use half the width to center the tooltip */
