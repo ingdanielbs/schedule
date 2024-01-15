@@ -267,6 +267,28 @@ def not_approved_students(not_approved):
         students[item['nmero_documento']] = {'nombre_completo': item['nombre'] + ' ' + item['apellidos'], 'documento': item['nmero_documento'], 'ficha': item['ficha']}   
     
     return students
+
+def apprentices_to_report(students_not_approved, document):
+    url = 'https://docs.google.com/spreadsheets/u/1/d/1NtboerXUyYT8kRm2tkJdrWq8Tn8GDBMFhh2PvfkB_oU/export?format=csv'
+    df = pd.read_csv(url)    
+    df['Evidencias'] = df['En este espacio se deberán montar las evidencias de los refuerzos pedagógicos aplicados al aprendiz o cualquier soporte que justifique la citación al comité. (solo archivos PDF)'].apply(lambda x: json.loads(x)[0]['link'] if x else None)   
+   
+    df.columns = ['id', 'fecha', 'hora_finalizacion', 'correo', 'nombre', 'nombre_completo_instructor', 'numero_documento_identidad', 'nombre_programa', 'ficha', 'nombre_completo_aprendiz', 'tipo_documento', 'documento', 'correo_electronico2', 'motivo', 'descripcion_motivo', 'evidencias', 'competencia', 'resultados_aprendizaje', 'powerapps_id', 'link_evidencias']
+    
+    df = df[df['numero_documento_identidad'] == document] 
+   
+    apprentices = []
+    """ recorrer students_not_approved y buscar en df['documento']. Si no se encuentra agregar a la lista de aprendices """
+    for key, value in students_not_approved.items():
+        if int(key) not in df['documento'].values:
+            print(df.info())
+            print(value)
+            apprentices.append(value)   
+    
+    return apprentices
+
+
+    
         
     
     

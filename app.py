@@ -6,7 +6,7 @@ from courses.horario_courses import get_schedule_course, generar_excel_course
 import requests
 
 from ingreso.login import loguear
-from instructors.horario import get_sum_horas, get_cant_fichas, get_fichas_titular, cant_no_aprobados, not_approved_students, get_horario_i, generar_excel
+from instructors.horario import apprentices_to_report, get_sum_horas, get_cant_fichas, get_fichas_titular, cant_no_aprobados, not_approved_students, get_horario_i, generar_excel
 
 import pandas as pd
 
@@ -47,7 +47,8 @@ def dashboard():
         quantity_groups = get_cant_fichas(user['name'], trimestre_academico)
         quantity_no_approved = len(cant_no_aprobados(str(user['document']))) 
         students_not_approved = not_approved_students(cant_no_aprobados(str(user['document'])))
-        return render_template("instructors/dashboard.html", user=user, hours=hours, quantity_groups=quantity_groups, titular=titular, quantity_no_approved=quantity_no_approved, trimestre=trimestre_academico, students_not_approved=students_not_approved)
+        apprentices_report = apprentices_to_report(students_not_approved, user['document'])        
+        return render_template("instructors/dashboard.html", user=user, hours=hours, quantity_groups=quantity_groups, titular=titular, quantity_no_approved=quantity_no_approved, trimestre=trimestre_academico, students_not_approved=students_not_approved, apprentices_report=apprentices_report)
     else:
         return redirect(url_for("login"))
 
