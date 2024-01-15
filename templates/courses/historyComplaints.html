@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid my-5">
+    <div class="row">
+        <div class="col-10 mx-auto">
+            <div class="card my-5 p-4 rounded-4">
+                <p class="mb-4">En este espacio puedes consultar el historial de un aprendiz en los comités de seguimiento académico</p>               
+                <form action="" method="post">
+                    {{ csrf_token }}
+                    <div class="row">
+                        <div class="col-md-9 mb-3">
+                            <label for="" class="form-label fw-bold">Documento del aprendiz</label>
+                            <input type="text" class="form-control" name="documentoaprendiz" id="" aria-describedby="helpId" placeholder="Ingresa el documento del aprendiz"/>                        
+                            <small class="text-danger">{{error}}</small>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary mt-4"> Consultar </button>
+                        </div>                        
+                    </div>                    
+                </form>
+                {% if data %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover mt-3">
+                        <thead>
+                            <tr>
+                                <th style="background-color: #C5EAE8;">Programa</th>
+                                <th style="background-color: #C5EAE8;">Ficha</th>
+                                <th style="background-color: #C5EAE8;">Instructores que reportan</th>
+                                <th style="background-color: #C5EAE8;">Instructores con no aprobados</th>
+                                <th style="background-color: #C5EAE8;">Aprendiz</th>
+                                <th style="background-color: #C5EAE8;">Documento</th>
+                                <th style="background-color: #C5EAE8;">Motivo de la queja</th>
+                                <th style="background-color: #C5EAE8;">Descripción de la queja</th>
+                                <th style="background-color: #C5EAE8;">Asistencia a comité</th>
+                                <th style="background-color: #C5EAE8;">Decisión del comité</th>
+                                <th style="background-color: #C5EAE8;">Fecha del comité</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for aprendiz in data %}
+                            <tr>
+                                <td>{{ aprendiz.PROGRAMA }}</td>
+                                <td>{{ aprendiz.FICHA }}</td>
+                                <td>{{ aprendiz.INSTRUCTOR_REPORTA }}</td>
+                                <td>{{ aprendiz.NOMBRE_INSTRUCTOR }}</td>
+                                <td>{{ aprendiz.NOMBRE_APRENDIZ }}</td>
+                                <td>{{ aprendiz.DOCUMENTO }}</td>
+                                <td>{{ aprendiz.QUEJA }}</td>
+                                <td>{{ aprendiz.MOTIVO }}</td>
+                                <td>{{ aprendiz.ASISTENCIA }}</td>
+                                <td>{{ aprendiz.DECISION }}</td>
+                                <td>{{ aprendiz.FECHA }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endif %}                                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

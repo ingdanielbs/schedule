@@ -1,8 +1,9 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, session, send_file
+from flask import Flask, render_template, request, redirect, url_for, session, send_file, jsonify
 from courses.competences import join_files
 from courses.complaint import complaints_students
 from courses.horario_courses import get_schedule_course, generar_excel_course
+import requests
 
 from ingreso.login import loguear
 from instructors.horario import get_sum_horas, get_cant_fichas, get_fichas_titular, cant_no_aprobados, not_approved_students, get_horario_i, generar_excel
@@ -86,7 +87,7 @@ def course_schedule():
             global ficha
             ficha = request.form["ficha"]
             if ficha:
-                schedule_course = get_schedule_course(ficha)
+                schedule_course = get_schedule_course(ficha, trimestre_academico)
                 days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
                 hours = ['h6_7', 'h7_8', 'h8_9', 'h9_10', 'h10_11', 'h11_12', 'h12_13', 'h13_14', 'h14_15', 'h15_16', 'h16_17', 'h17_18', 'h18_19', 'h19_20', 'h20_21', 'h21_22']
                 hours_f = ['6:00 - 7:00', '7:00 - 8:00', '8:00 - 9:00', '9:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00', '20:00 - 21:00', '21:00 - 22:00']
@@ -95,14 +96,14 @@ def course_schedule():
             else:
                 error = 'Ficha no encontrada'
                 return render_template('courses/schedule.html', error=error)
-        return render_template('courses/schedule.html', user=user)
+        return render_template("courses/schedule.html", user=user)        
     else:
         return redirect(url_for("login"))
     
 @app.route("/schedule_course_down")
 def schedule_course_down():
     if "username" in session:        
-        generar_excel_course(get_schedule_course(ficha), f"Horario {trimestre_academico} - {ficha}.xlsx")
+        generar_excel_course(get_schedule_course(ficha, trimestre_academico), f"Horario {trimestre_academico} - {ficha}.xlsx")
 
         file_path = f"static/schedule-courses/Horario {trimestre_academico} - {ficha}.xlsx"        
         if os.path.exists(file_path):
@@ -136,6 +137,25 @@ def upload_competences():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
+
+@app.route("/history_complaints", methods=["GET", "POST"])
+def history_complaints():
+    if "username" in session:
+        user = session["user"]
+        if request.method == "POST":
+            api_url = 'https://bot-comite-f8b3fb371ca5.herokuapp.com/aprendicesencomite'    
+            documento_aprendiz = request.form["documentoaprendiz"]
+            response = requests.get(api_url)      
+            if response.status_code == 200:            
+                data = response.json()     
+                if documento_aprendiz:
+                    data = [aprendiz for aprendiz in data if aprendiz['DOCUMENTO'] == int(documento_aprendiz)]
+                    print(data)                
+                    return render_template("courses/historyComplaints.html", data=data, user=user)            
+        else:
+            return render_template("courses/historyComplaints.html", user=user)
+    
+    
 
 
 if __name__ == '__main__':
