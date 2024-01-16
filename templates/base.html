@@ -34,6 +34,9 @@
 
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
 
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 </head>
 
 <body>
@@ -44,62 +47,6 @@
                 <a href="#offcanvasPrimaryMenu" data-bs-toggle="offcanvas"><i
                         class="material-icons-outlined">menu</i></a>
             </div>
-            <div class="search-bar w-50">
-                <div class="position-relative">
-                    <div class="search-popup p-3">
-                        <div class="card rounded-4 overflow-hidden">
-
-                            <div class="card-body search-content">
-                                <p class="search-title">Recent Searches</p>
-                                <div class="d-flex align-items-start flex-wrap gap-2 kewords-wrapper">
-                                    <a href="javascript:;" class="kewords"><span>Angular Template</span><i
-                                            class="material-icons-outlined fs-6">search</i></a>
-                                    <a href="javascript:;" class="kewords"><span>Dashboard</span><i
-                                            class="material-icons-outlined fs-6">search</i></a>
-                                    <a href="javascript:;" class="kewords"><span>Admin Template</span><i
-                                            class="material-icons-outlined fs-6">search</i></a>
-                                    <a href="javascript:;" class="kewords"><span>Bootstrap 5 Admin</span><i
-                                            class="material-icons-outlined fs-6">search</i></a>
-                                    <a href="javascript:;" class="kewords"><span>Html eCommerce</span><i
-                                            class="material-icons-outlined fs-6">search</i></a>
-                                    <a href="javascript:;" class="kewords"><span>Sass</span><i
-                                            class="material-icons-outlined fs-6">search</i></a>
-                                    <a href="javascript:;" class="kewords"><span>laravel 9</span><i
-                                            class="material-icons-outlined fs-6">search</i></a>
-                                </div>
-                                <hr>
-                                <p class="search-title">Tutorials</p>
-                                <div class="search-list d-flex flex-column gap-2">
-                                    <div class="search-list-item d-flex align-items-center gap-3">
-                                        <div class="list-icon">
-                                            <i class="material-icons-outlined fs-5">play_circle</i>
-                                        </div>
-                                        <div class="">
-                                            <h5 class="mb-0 search-list-title ">Wordpress Tutorials</h5>
-                                        </div>
-                                    </div>
-                                    <div class="search-list-item d-flex align-items-center gap-3">
-                                        <div class="list-icon">
-                                            <i class="material-icons-outlined fs-5">shopping_basket</i>
-                                        </div>
-                                        <div class="">
-                                            <h5 class="mb-0 search-list-title">eCommerce Website Tutorials</h5>
-                                        </div>
-                                    </div>
-
-                                    <div class="search-list-item d-flex align-items-center gap-3">
-                                        <div class="list-icon">
-                                            <i class="material-icons-outlined fs-5">laptop</i>
-                                        </div>
-                                        <div class="">
-                                            <h5 class="mb-0 search-list-title">Responsive Design</h5>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
         </nav>
     </header>
     <!--end top header-->
@@ -113,16 +60,27 @@
         </div>
         <div class="quick-menu">
             <nav class="nav flex-column gap-1">
-                <a class="nav-link custom-tooltip" href="{{ url_for('dashboard') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard">                    
+                <a class="nav-link custom-tooltip" href="{{ url_for('dashboard') }}" data-bs-toggle="tooltip"
+                    data-bs-placement="right" title="Dashboard">
                     <i class="material-icons-outlined">home</i></a>
-                <a class="nav-link" href="{{ url_for('schedule') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Horario Instructor">
+                {% if user['role'] == 'COORDINADOR' %}
+                <a class="nav-link" href="{{ url_for('schedule_instructors') }}" data-bs-toggle="tooltip"
+                    data-bs-placement="right" title="Horario Instructor">
                     <i class="material-icons-outlined">event</i></a>
-                <a class="nav-link" href="{{ url_for('course_schedule') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Horario Fichas">
+                {% else %}
+                <a class="nav-link" href="{{ url_for('schedule') }}" data-bs-toggle="tooltip" data-bs-placement="right"
+                    title="Horario Instructor">
+                    <i class="material-icons-outlined">event</i></a>
+                {% endif %}
+                <a class="nav-link" href="{{ url_for('course_schedule') }}" data-bs-toggle="tooltip"
+                    data-bs-placement="right" title="Horario Fichas">
                     <i class="material-icons-outlined">school</i></a>
-                <a class="nav-link" href="{{ url_for('complaints') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Quejas académicas"><i
+                <a class="nav-link" href="{{ url_for('complaints') }}" data-bs-toggle="tooltip"
+                    data-bs-placement="right" title="Quejas académicas"><i
                         class="material-icons-outlined">manage_search</i></a>
-                <a class="nav-link" href="{{ url_for('history_complaints') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Historial de comité"><i
-                            class="material-icons-outlined">layers</i></a>
+                <a class="nav-link" href="{{ url_for('history_complaints') }}" data-bs-toggle="tooltip"
+                    data-bs-placement="right" title="Historial de comité"><i
+                        class="material-icons-outlined">layers</i></a>
                 <!-- <a class="nav-link" href="ecommerce-products.html"><i class="material-icons-outlined" title="Actualizar juicios">update</i></a> -->
                 <!-- <a class="nav-link" href="javascript:;"><i class="material-icons-outlined">poll</i></a> -->
             </nav>
@@ -220,7 +178,7 @@
         })
     </script>
 
-<!-- <script src="https://cloud.openchat.so/chat.js"></script>
+    <!-- <script src="https://cloud.openchat.so/chat.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var chatConfig = {

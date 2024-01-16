@@ -26,6 +26,7 @@ def login():
         if user:
             session["username"] = username
             session["user"] = user
+            
             return redirect(url_for("dashboard"))             
         else:
             error = 'Usuario no registrado'
@@ -42,6 +43,7 @@ def logout():
 def dashboard():
     if "username" in session:
         user = session["user"]
+        
         titular = get_fichas_titular(user['name'], trimestre_academico)            
         hours = get_sum_horas(user['name'], trimestre_academico)
         quantity_groups = get_cant_fichas(user['name'], trimestre_academico)
@@ -61,7 +63,7 @@ def schedule():
         hours = ['h6_7', 'h7_8', 'h8_9', 'h9_10', 'h10_11', 'h11_12', 'h12_13', 'h13_14', 'h14_15', 'h15_16', 'h16_17', 'h17_18', 'h18_19', 'h19_20', 'h20_21', 'h21_22']
         hours_f = ['6:00 - 7:00', '7:00 - 8:00', '8:00 - 9:00', '9:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00', '20:00 - 21:00', '21:00 - 22:00']
         hours_combined = zip(hours, hours_f)
-        print(schedule)
+        
         return render_template("instructors/schedule.html", user=user, schedule=schedule, days=days, hours_combined=hours_combined, trimestre= trimestre_academico)
     else:
         return redirect(url_for("login"))
@@ -151,12 +153,32 @@ def history_complaints():
                 data = response.json()     
                 if documento_aprendiz:
                     data = [aprendiz for aprendiz in data if aprendiz['DOCUMENTO'] == int(documento_aprendiz)]
-                    print(data)                
+                                    
                     return render_template("courses/historyComplaints.html", data=data, user=user)            
         else:
             return render_template("courses/historyComplaints.html", user=user)
     
-    
+@app.route("/schedule_instructors", methods=["GET", "POST"])
+def schedule_instructors():
+    if "username" in session:
+        user = session["user"]
+        df = pd.read_excel('static/datalog/datos.xls')
+        
+        instructors = list(df[df['role'] == 'INSTRUCTOR']['name'].sort_values())
+        if request.method == "POST":
+            name_i = request.form["instructor_name"]       
+            schedule = get_horario_i(name_i, trimestre_academico)    
+            days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+            hours = ['h6_7', 'h7_8', 'h8_9', 'h9_10', 'h10_11', 'h11_12', 'h12_13', 'h13_14', 'h14_15', 'h15_16', 'h16_17', 'h17_18', 'h18_19', 'h19_20', 'h20_21', 'h21_22']
+            hours_f = ['6:00 - 7:00', '7:00 - 8:00', '8:00 - 9:00', '9:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00', '20:00 - 21:00', '21:00 - 22:00']
+            hours_combined = zip(hours, hours_f)
+        
+            return render_template("instructors/schedule_instructors.html", user=user, schedule=schedule, days=days, hours_combined=hours_combined, trimestre= trimestre_academico, instructors=instructors)
+        
+        return render_template("instructors/schedule_instructors.html", user=user, instructors=instructors, trimestre= trimestre_academico)
+
+    else:
+        return redirect(url_for("login"))
 
 
 if __name__ == '__main__':
