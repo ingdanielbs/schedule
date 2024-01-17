@@ -283,9 +283,7 @@ def apprentices_to_report(students_not_approved, document):
     apprentices = []
     """ recorrer students_not_approved y buscar en df['documento']. Si no se encuentra agregar a la lista de aprendices """
     for key, value in students_not_approved.items():
-        if int(key) not in df['documento'].values:
-            print(df.info())
-            print(value)
+        if int(key) not in df['documento'].values:            
             apprentices.append(value)   
     
     return apprentices
