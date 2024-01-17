@@ -19,7 +19,9 @@ def get_horario_i(instructor_name, trimestre):
     
     df['NOMBRE_COMPETENCIA'] = df['NOMBRE_COMPETENCIA'].str.split('-').str[1].str.strip()
 
-    df = df[df['INSTRUCTOR'].str.strip() == instructor_name]
+    df['INSTRUCTOR'] = df['INSTRUCTOR'].str.upper()
+
+    df = df[df['INSTRUCTOR'].str.strip() == instructor_name.upper()]
 
     horario_instructor = {"nombre": instructor_name, "horario": {}}
 
