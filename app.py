@@ -104,7 +104,8 @@ def course_schedule():
     
 @app.route("/schedule_course_down")
 def schedule_course_down():
-    if "username" in session:        
+    if "username" in session:
+        global ficha        
         generar_excel_course(get_schedule_course(ficha, trimestre_academico), f"Horario {trimestre_academico} - {ficha}.xlsx")
 
         file_path = f"static/schedule-courses/Horario {trimestre_academico} - {ficha}.xlsx"        
