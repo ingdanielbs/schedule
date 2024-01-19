@@ -86,6 +86,7 @@ def course_schedule():
         error = None
         user = session["user"]
         global ficha
+        ficha = None
         if request.method == "POST":
             ficha = request.form["ficha"]
             if ficha:
