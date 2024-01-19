@@ -25,15 +25,14 @@
                 </form>
                 <div class="table-responsive">
                     <div class="d-flex align-items-center justify-content-between">
-                        <!-- <div>
-                            <a class="mb-3" href="{{ url_for('schedule_down') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Descargar horario">                            
-                               
-                                <img src="{{ url_for( 'static', filename = 'images/export-excel-35.png' ) }}" alt=""></a>
+                        <div>
+                            <!-- <a class="mb-3" href="{{ url_for('schedule_down') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Descargar horario">                       
+                                <img src="{{ url_for( 'static', filename = 'images/export-excel-35.png' ) }}" alt=""></a> -->
                             <a type="button" class="mb-3 mx-2 custom-tooltip" title="Detalle RAPS" data-bs-toggle="tooltip" data-bs-placement="right">                                
                                 <img src="{{ url_for( 'static', filename = 'images/rap1-icon-35.png' ) }}" alt="" data-bs-toggle="modal" data-bs-target="#modalRaps" >
                             </a>                                                    
                             
-                        </div> -->
+                        </div>
                         <p class="fs-6 ml-4"> <span class="fw-bold ml-4">Trimestre académico:</span> {{trimestre}}</p>                        
                     </div>    
                     {% if schedule %}            
@@ -89,7 +88,10 @@
                                 <th>Palabra clave</th>
                                 <th>Norma de Competencia (Sofíaplus) </th>
                                 <th>Compentencia</th>
-                                <th>RAP</th>                                
+                                <th>RAP</th>
+                                {% if user['role'] == 'APOYO_COORDINADOR'  %}
+                                <th>RAP EN SOFIA</th>
+                                {% endif %}                                
                             </tr>
                         </thead>
                         <tbody>
@@ -102,6 +104,10 @@
                                 <td>{{ detalle[0].NCL }}</td>
                                 <td>{{ detalle[0].COMPETENCIA }}</td>
                                 <td>{{ detalle[0].RAP }}</td>
+                                <!-- RAP_SOFIA -->
+                                {% if user['role'] == 'APOYO_COORDINADOR'  %}
+                                <td>{{ detalle[0].RAP_SOFIA }}</td>
+                                {% endif %}
                             </tr>
                             {% endfor %}
                         </tbody>

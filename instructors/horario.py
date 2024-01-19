@@ -49,10 +49,9 @@ def get_horario_i(instructor_name, trimestre):
                 detalle = clase['detalle']
                 if detalle:
                     detalle[0]['FICHA'] = clase['FICHA']
-                    detalle[0]['TRIMESTRE'] = clase['TRIMESTRE']
-                    # Convert the dictionary to a tuple of items
+                    detalle[0]['TRIMESTRE'] = clase['TRIMESTRE']                    
                     detalle_tuple = tuple(detalle[0].items())
-                    if detalle_tuple not in detalles_set:  # Check if the tuple is not in the set
+                    if detalle_tuple not in detalles_set:
                         detalles["key"].append(detalle)
                         detalles_set.add(detalle_tuple)
     
