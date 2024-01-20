@@ -13,7 +13,7 @@ import pandas as pd
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/' 
 
-user, ficha = None, None
+user = None
 trimestre_academico = '1-2024'
 @app.route("/", methods=["GET", "POST"])
 def login():
@@ -86,9 +86,9 @@ def course_schedule():
         error = None
         user = session["user"]
         global ficha
-        ficha = None
         if request.method == "POST":
             ficha = request.form["ficha"]
+            session['ficha_down'] = ficha
             if ficha:
                 schedule_course = get_schedule_course(ficha, trimestre_academico)
                 
@@ -107,12 +107,11 @@ def course_schedule():
 @app.route("/schedule_course_down")
 def schedule_course_down():
     if "username" in session:
-        global ficha 
+        ficha = session['ficha_down']
         generar_excel_course(get_schedule_course(ficha, trimestre_academico), f"Horario {trimestre_academico} - {ficha}.xlsx")
 
         file_path = f"static/schedule-courses/Horario {trimestre_academico} - {ficha}.xlsx"        
-        if os.path.exists(file_path):
-            ficha = None       
+        if os.path.exists(file_path):                 
             return send_file(file_path, as_attachment=True)
         else:
             return redirect(url_for("course_schedule"))
