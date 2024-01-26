@@ -87,7 +87,7 @@ def course_schedule():
         user = session["user"]
         global ficha
         if request.method == "POST":
-            ficha = request.form["ficha"]
+            ficha = request.form["ficha"].strip()
             session['ficha_down'] = ficha
             if ficha:
                 schedule_course = get_schedule_course(ficha, trimestre_academico)
