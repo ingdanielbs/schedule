@@ -15,3 +15,17 @@ def complaints_students():
     df = df.to_dict('records')
     return df
 
+
+def committe_history(document):
+    df = pd.read_excel('static/committee_history/comites.xlsx')
+
+    df.columns = ['PROGRAMA', 'FICHA', 'INSTRUCTOR_REPORTA', 'NOMBRE_INSTRUCTOR', 'NOMBRE_APRENDIZ', 'DOCUMENTO', 'QUEJA', 'MOTIVO', 'ASISTENCIA', 'DECISION', 'FECHA']
+    #quitar la hora de la FECHA DEL COMITÉ
+    df['FECHA'] = df['FECHA'].dt.date
+
+    #Filtrar por el documento del aprendiz
+    df = df[df['DOCUMENTO'] == document]
+    
+    df = df.to_dict('records')
+    return df
+

@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, send_file, jsonify
 from courses.competences import join_files
-from courses.complaint import complaints_students
+from courses.complaint import committe_history, complaints_students
 from courses.horario_courses import get_schedule_course, generar_excel_course
 import requests
 
@@ -147,16 +147,16 @@ def page_not_found(e):
 def history_complaints():
     if "username" in session:
         user = session["user"]
-        if request.method == "POST":
-            api_url = 'https://bot-comite-f8b3fb371ca5.herokuapp.com/aprendicesencomite'    
+        if request.method == "POST":              
             documento_aprendiz = request.form["documentoaprendiz"]
-            response = requests.get(api_url)      
-            if response.status_code == 200:            
-                data = response.json()     
-                if documento_aprendiz:
-                    data = [aprendiz for aprendiz in data if aprendiz['DOCUMENTO'] == int(documento_aprendiz)]
-                                    
-                    return render_template("courses/historyComplaints.html", data=data, user=user)            
+            try:
+                data = committe_history(int(documento_aprendiz))
+            except ValueError:
+                return render_template("courses/historyComplaints.html", user=user, error='El valor ingresado debe ser un numero')
+            if data:
+                return render_template("courses/historyComplaints.html", data=data, user=user)
+            else:
+                return render_template("courses/historyComplaints.html", user=user, error='No se encontraron resultados')            
         else:
             return render_template("courses/historyComplaints.html", user=user)
     
