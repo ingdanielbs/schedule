@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid my-5">
+    <div class="row">
+        <div class="col-10 mx-auto">
+            <div class="card my-5 p-4 rounded-4">
+                <form action="" method="post">
+                    {{ csrf_token }}
+                    <div class="row">
+                        <div class="col-md-9 mb-3">
+                            <label for="classroom_number" class="form-label fw-bold">Número de ambiente</label>
+                            <input list="classroom_list" class="form-control" name="classroom_number"
+                                id="classroom_number" aria-describedby="helpId"
+                                placeholder="Ingresa el número del ambiente" required/>
+                            <datalist id="classroom_list">
+                                {% for classroom in classroom_list %}
+                                <option value="{{ classroom }}">{{ classroom }}</option>
+                                {% endfor %}
+                            </datalist>
+                            <small class="text-danger">{{error}}</small>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary mt-4"> Consultar </button>
+                        </div>
+                    </div>
+                </form>
+                {% if schedule %}
+                <div class="table-responsive mt-4">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex">
+                            <p class="fs-6 mx-3"> <span class="fw-bold">Ambiente:</span> {{ number }}</p>
+                        </div>
+                    </div>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th></th>
+                            {% for day in days %}
+                            <th style="background-color: #C5EAE8;">{{ day }}</th>
+                            {% endfor %}
+                        </tr>
+                        {% for hour, hour_f in hours_combined %}
+                        <tr>
+                            <td class="fw-bold">{{ hour_f }}</td>
+                            {% for day in days %}
+                            <td>
+                                {% for clase in schedule[number][day][hour] %}
+                                <small class="d-block text-center">{{ clase.INSTRUCTOR }}</small>
+                                <small class="d-block text-center">{{ clase.FICHA }}</small>
+                                {% endfor %}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+
+                    </table>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
