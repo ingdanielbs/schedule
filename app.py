@@ -1,6 +1,7 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, send_file, jsonify
 from coordination.classroom_schedule import get_horario_ambiente
+from coordination.dashboard import count_courses, count_instructors, count_not_approved_rap
 from courses.competences import join_files
 from courses.complaint import committe_history, complaints_students
 from courses.horario_courses import get_schedule_course, generar_excel_course
@@ -43,14 +44,17 @@ def logout():
 @app.route("/dashboard")
 def dashboard():
     if "username" in session:
-        user = session["user"]        
+        user = session["user"]            
         titular = get_fichas_titular(user['name'], trimestre_academico)            
         hours = get_sum_horas(user['name'], trimestre_academico)
         quantity_groups = get_cant_fichas(user['name'], trimestre_academico)
         quantity_no_approved = len(cant_no_aprobados(str(user['document']))) 
         students_not_approved = not_approved_students(cant_no_aprobados(str(user['document'])))
-        apprentices_report = apprentices_to_report(students_not_approved, user['document'])        
-        return render_template("instructors/dashboard.html", user=user, hours=hours, quantity_groups=quantity_groups, titular=titular, quantity_no_approved=quantity_no_approved, trimestre=trimestre_academico, students_not_approved=students_not_approved, apprentices_report=apprentices_report)
+        apprentices_report = apprentices_to_report(students_not_approved, user['document']) 
+        quantity_instructors = count_instructors() 
+        quantity_no_approved_rap = len(count_not_approved_rap())
+        quantity_courses = count_courses()            
+        return render_template("instructors/dashboard.html", user=user, hours=hours, quantity_groups=quantity_groups, titular=titular, quantity_no_approved=quantity_no_approved, trimestre=trimestre_academico, students_not_approved=students_not_approved, apprentices_report=apprentices_report, quantity_instructors=quantity_instructors, quantity_no_approved_rap=quantity_no_approved_rap, quantity_courses=quantity_courses)
     else:
         return redirect(url_for("login"))
 
@@ -199,9 +203,8 @@ def schedule_classroom():
                 number = int(number_classroom)
             else:
                 number = number_classroom
-            schedule = get_horario_ambiente(number)
+            schedule = get_horario_ambiente(number)            
             
-            print(schedule)
             return render_template("coordination/schedule_classroom.html", user=user, schedule=schedule, days=days, hours_combined=hours_combined, trimestre= trimestre_academico, number=number, classroom_list=classroom_list)
         return render_template("coordination/schedule_classroom.html", user=user, classroom_list=classroom_list)
     

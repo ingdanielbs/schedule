@@ -38,9 +38,14 @@
                 <a href="javascript:;"
                   class="mb-2 wh-48 bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center">
                   <i class="material-icons-outlined">layers</i>
-                </a>
+                </a>  
+                {% if user.role == "COORDINADOR" or user.role == "APOYO_COORDINADOR" %}              
+                <h3 class="mb-0">{{ quantity_courses }}</h3>
+                <p class="mb-0">Fichas</p>
+                {% else %}               
                 <h3 class="mb-0">{{ quantity_groups }}</h3>
                 <p class="mb-0">Fichas</p>
+                {% endif %}
               </div>
               <div class="vr"></div>
               <div class="d-flex flex-column align-items-center justify-content-center gap-2">
@@ -48,8 +53,13 @@
                   class="mb-2 wh-48 bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center">
                   <i class="material-icons-outlined">group</i>
                 </a>
+                {% if user.role == "COORDINADOR" or user.role == "APOYO_COORDINADOR" %}
+                <h3 class="mb-0">{{ quantity_instructors }}</h3>
+                <p class="mb-0">Instructores</p>
+                {% else %}
                 <h3 class="mb-0">{{ hours }}</h3>
                 <p class="mb-0">Horas semanales</p>
+                {% endif %}
               </div>
               <div class="vr"></div>
               <div class="d-flex flex-column align-items-center justify-content-center gap-2">
@@ -57,8 +67,11 @@
                   class="mb-2 wh-48 bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center">
                   <i class="material-icons-outlined">notifications</i>
                 </a>
+                {% if user.role == "COORDINADOR" or user.role == "APOYO_COORDINADOR" %}
+                <h3 class="mb-0">{{quantity_no_approved_rap}}</h3>                
+                {% else %}
                 <h3 class="mb-0">{{quantity_no_approved}}</h3>
-                </h3>
+                {% endif %}
                 <p class="mb-0">RAP con No Aprobado</p>
               </div>
               <div class="vr"></div>
