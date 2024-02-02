@@ -2,8 +2,8 @@ import pandas as pd
 import json
 
 def count_instructors():
-    df = pd.read_excel('static/datalog/datos.xls')    
-    df = df[df['role'] == 'INSTRUCTOR']
+    df = pd.read_excel('static/datalog/datos.xls')   
+    df = df[df['role'].isin(['INSTRUCTOR', 'INSTRUCTOR_APOYO'])]
     df = df['role'].count()
     return df
 
