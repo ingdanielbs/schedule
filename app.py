@@ -6,6 +6,7 @@ from courses.competences import join_files
 from courses.complaint import committe_history, complaints_students
 from courses.horario_courses import get_schedule_course, generar_excel_course
 import requests
+from bson.objectid import ObjectId
 
 from ingreso.login import loguear
 from instructors.horario import apprentices_to_report, get_sum_horas, get_cant_fichas, get_fichas_titular, cant_no_aprobados, not_approved_students, get_horario_i, generar_excel
@@ -23,12 +24,11 @@ def login():
     error = None
     if request.method == "POST":
         username = request.form["username"]        
-        user = loguear(username)
+        user = loguear(username)        
 
         if user:
             session["username"] = username
-            session["user"] = user
-            
+            session["user"] = user           
             return redirect(url_for("dashboard"))             
         else:
             error = 'Usuario no registrado'
@@ -44,13 +44,14 @@ def logout():
 @app.route("/dashboard")
 def dashboard():
     if "username" in session:
-        user = session["user"]            
+        user = session["user"]  
+        print(user)     
         titular = get_fichas_titular(user['name'], trimestre_academico)            
         hours = get_sum_horas(user['name'], trimestre_academico)
         quantity_groups = get_cant_fichas(user['name'], trimestre_academico)
         quantity_no_approved = len(cant_no_aprobados(str(user['document']))) 
-        students_not_approved = not_approved_students(cant_no_aprobados(str(user['document'])))
-        apprentices_report = apprentices_to_report(students_not_approved, user['document']) 
+        students_not_approved = not_approved_students(cant_no_aprobados(str(user['document'])))        
+        apprentices_report = apprentices_to_report(students_not_approved, int(user['document'])) 
         quantity_instructors = count_instructors() 
         quantity_no_approved_rap = len(count_not_approved_rap())
         quantity_courses = count_courses()            
