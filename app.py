@@ -17,7 +17,6 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
 hours = ['h6_7', 'h7_8', 'h8_9', 'h9_10', 'h10_11', 'h11_12', 'h12_13', 'h13_14', 'h14_15', 'h15_16', 'h16_17', 'h17_18', 'h18_19', 'h19_20', 'h20_21', 'h21_22']
 hours_f = ['6:00 - 7:00', '7:00 - 8:00', '8:00 - 9:00', '9:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00', '20:00 - 21:00', '21:00 - 22:00']
-hours_combined = zip(hours, hours_f)
 
 user = None
 trimestre_academico = '1-2024'
@@ -61,9 +60,7 @@ def dashboard():
 @app.route("/schedule")
 @login_required
 def schedule():     
-    user = session["user"]
-    hours = ['h6_7', 'h7_8', 'h8_9', 'h9_10', 'h10_11', 'h11_12', 'h12_13', 'h13_14', 'h14_15', 'h15_16', 'h16_17', 'h17_18', 'h18_19', 'h19_20', 'h20_21', 'h21_22']
-    hours_f = ['6:00 - 7:00', '7:00 - 8:00', '8:00 - 9:00', '9:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00', '20:00 - 21:00', '21:00 - 22:00']
+    user = session["user"]    
     hours_combined = zip(hours, hours_f)
     schedule = get_horario_i(user['name'], trimestre_academico)       
     return render_template("instructors/schedule.html", user=user, schedule=schedule, days=days, hours_combined=hours_combined, trimestre= trimestre_academico)
@@ -85,9 +82,7 @@ def course_schedule():
     error = None
     user = session["user"]
     global ficha
-    if request.method == "POST":
-        hours = ['h6_7', 'h7_8', 'h8_9', 'h9_10', 'h10_11', 'h11_12', 'h12_13', 'h13_14', 'h14_15', 'h15_16', 'h16_17', 'h17_18', 'h18_19', 'h19_20', 'h20_21', 'h21_22']
-        hours_f = ['6:00 - 7:00', '7:00 - 8:00', '8:00 - 9:00', '9:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00', '20:00 - 21:00', '21:00 - 22:00']
+    if request.method == "POST":        
         hours_combined = zip(hours, hours_f)
         ficha = request.form["ficha"].strip()
         session['ficha_down'] = ficha
@@ -156,9 +151,7 @@ def schedule_instructors():
     user = session["user"]
     df = pd.read_excel('static/datalog/datos.xls')    
     instructors = list(df[df['role'] == 'INSTRUCTOR']['name'].sort_values())
-    if request.method == "POST":
-        hours = ['h6_7', 'h7_8', 'h8_9', 'h9_10', 'h10_11', 'h11_12', 'h12_13', 'h13_14', 'h14_15', 'h15_16', 'h16_17', 'h17_18', 'h18_19', 'h19_20', 'h20_21', 'h21_22']
-        hours_f = ['6:00 - 7:00', '7:00 - 8:00', '8:00 - 9:00', '9:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00', '20:00 - 21:00', '21:00 - 22:00']
+    if request.method == "POST":        
         hours_combined = zip(hours, hours_f)
         name_i = request.form["instructor_name"]       
         schedule = get_horario_i(name_i, trimestre_academico)        
@@ -171,9 +164,7 @@ def schedule_classroom():
     user = session["user"]
     classroom_list = ['506','503','504','502','505','303','TEC303','2','703','806','705','801','802','701','706','702','704','805','803','501','203','605','205','411','0','1004','1003','1005','1007','1001','804','403','410']                    
     classroom_list.sort()
-    if request.method == "POST":
-        hours = ['h6_7', 'h7_8', 'h8_9', 'h9_10', 'h10_11', 'h11_12', 'h12_13', 'h13_14', 'h14_15', 'h15_16', 'h16_17', 'h17_18', 'h18_19', 'h19_20', 'h20_21', 'h21_22']
-        hours_f = ['6:00 - 7:00', '7:00 - 8:00', '8:00 - 9:00', '9:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00', '20:00 - 21:00', '21:00 - 22:00']
+    if request.method == "POST":        
         hours_combined = zip(hours, hours_f)
         number_classroom = request.form["classroom_number".strip()]        
         if number_classroom != 'TEC303':
