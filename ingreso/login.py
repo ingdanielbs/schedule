@@ -8,8 +8,7 @@ conection_string = f"mongodb+srv://{user}:{password}@cluster0.ll5vs9x.mongodb.ne
 
 def connect():
     try:
-        client = MongoClient(conection_string)
-        print("Connected to MongoDB")
+        client = MongoClient(conection_string)       
         return client 
     except Exception as e:
         print(f"Error connecting to MongoDB: {e}")
@@ -31,4 +30,28 @@ def loguear(document):
         client.close()
         return {"name": user["name"], "document": user["document"], "email": user["email"], "phone:": user["phone"], "role": user["role"], "status": user["status"], "gender": user["gender"], "contract_type": user["contract_type"]} 
     return None
+
+def get_users():
+    client = connect()
+    if client:
+        db = client["sara"]
+        collection = db["users"]
+        users = collection.find()    
+        data = list(users)
+        df = pd.DataFrame(data)    
+        return df.to_dict('records') if len(df) > 0 else None
+    return None
+   
+def change_status(document):    
+    client = connect()
+    if client:
+        db = client["sara"]
+        collection = db["users"]
+        user = collection.find_one({"document": document})
+        if user:            
+            status = not user["status"]
+            collection.update_one({"document": document}, {"$set": {"status": status}})
+            client.close()
+            return True
+    return False
 

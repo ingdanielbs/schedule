@@ -1,14 +1,11 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, session, send_file, jsonify
+from flask import Flask, flash, render_template, request, redirect, url_for, session, send_file, jsonify
 from coordination.classroom_schedule import get_horario_ambiente
 from coordination.dashboard import count_courses, count_instructors, count_not_approved_rap
 from courses.competences import join_files
 from courses.complaint import committe_history, complaints_students
 from courses.horario_courses import get_schedule_course, generar_excel_course
-import requests
-from bson.objectid import ObjectId
-
-from ingreso.login import loguear
+from ingreso.login import change_status, get_users, loguear
 from instructors.horario import apprentices_to_report, get_sum_horas, get_cant_fichas, get_fichas_titular, cant_no_aprobados, not_approved_students, get_horario_i, generar_excel
 
 import pandas as pd
@@ -25,8 +22,8 @@ def login():
     if request.method == "POST":
         username = request.form["username"]        
         user = loguear(username)        
-
-        if user:
+        """ Si el status es true crea la sesion y redirige al dashboard, si no, muestra un mensaje de error """        
+        if user and user["status"]:
             session["username"] = username
             session["user"] = user           
             return redirect(url_for("dashboard"))             
@@ -44,8 +41,7 @@ def logout():
 @app.route("/dashboard")
 def dashboard():
     if "username" in session:
-        user = session["user"]  
-        print(user)     
+        user = session["user"]              
         titular = get_fichas_titular(user['name'], trimestre_academico)            
         hours = get_sum_horas(user['name'], trimestre_academico)
         quantity_groups = get_cant_fichas(user['name'], trimestre_academico)
@@ -210,8 +206,29 @@ def schedule_classroom():
         return render_template("coordination/schedule_classroom.html", user=user, classroom_list=classroom_list)
     
     
+@app.route("/users", methods=["GET", "POST"])
+def users():
+    if "username" in session:
+        user = session["user"]        
+        list_users = get_users()
+        return render_template("users/index.html", user=user, list_users=list_users)
+    else:
+        return redirect(url_for("login"))
 
-
+@app.route("/users_state_change", methods=["GET", "POST"])
+def users_state_change():
+    if "username" in session:        
+        if request.method == "POST":
+            document = request.form["document"]            
+            if change_status(document):
+                flash('Estado cambiado correctamente', 'success')
+                return redirect(url_for("users")) 
+            else:
+                flash('Error al cambiar el estado', 'error')
+                return redirect(url_for("users"))            
+    else:
+        return redirect(url_for("login"))
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
