@@ -16,7 +16,8 @@ def get_schedule_course(codigo_course, trimestre):
     
     df = df.drop(['Source', 'COMPETENCIA', 'RAP 1', 'RAP 2', 'RAP 3', 'RAP 4', 'RAP 5', 'RAP 6', 'NC2', 'HORAS_SEMANAL', 'NN2', 'HORAS_SEMANAL',], axis=1)
     
-    df['NOMBRE_COMPETENCIA'] = df['NOMBRE_COMPETENCIA'].str.split('-').str[1].str.strip()
+
+    df['NOMBRE_COMPETENCIA'] = df['NOMBRE_COMPETENCIA'].str.split('-').str[-1].str.strip()
     df['FICHA'] = df['FICHA'].str.split().str[0]
     df = df[df['FICHA'].str.strip() == codigo_course]
 

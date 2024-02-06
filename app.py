@@ -6,12 +6,16 @@ from courses.competences import join_files
 from courses.complaint import committe_history, complaints_students
 from courses.horario_courses import get_schedule_course, generar_excel_course
 from decorators.decorators import login_required
-from ingreso.login import change_status, get_users, loguear
+from ingreso.login import change_status, delete_user, get_users, loguear, register_user, update_user
 from instructors.horario import apprentices_to_report, get_sum_horas, get_cant_fichas, get_fichas_titular, cant_no_aprobados, not_approved_students, get_horario_i, generar_excel
 
 import pandas as pd
 
+from datetime import timedelta
+
+
 app = Flask(__name__)
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=15)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/' 
 
 days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
@@ -24,12 +28,19 @@ trimestre_academico = '1-2024'
 def login():
     global user
     error = None
+    if "username" in session:
+        return redirect(url_for("dashboard"))
     if request.method == "POST":
+        remember = 'remember' in request.form        
         username = request.form["username"]        
         user = loguear(username)               
         if user and user["status"]:
             session["username"] = username
-            session["user"] = user           
+            session["user"] = user
+            if remember:
+                session.permanent = True
+            else:
+                session.permanent = False           
             return redirect(url_for("dashboard"))             
         else:
             error = 'Usuario no registrado'
@@ -57,7 +68,7 @@ def dashboard():
     quantity_courses = count_courses()            
     return render_template("instructors/dashboard.html", user=user, hours_trimestre=hours_trimestre, quantity_groups=quantity_groups, titular=titular, quantity_no_approved=quantity_no_approved, trimestre=trimestre_academico, students_not_approved=students_not_approved, apprentices_report=apprentices_report, quantity_instructors=quantity_instructors, quantity_no_approved_rap=quantity_no_approved_rap, quantity_courses=quantity_courses)
 
-@app.route("/schedule")
+@app.route("/schedule", methods=["GET", "POST"])
 @login_required
 def schedule():     
     user = session["user"]    
@@ -91,8 +102,8 @@ def course_schedule():
             return render_template('courses/schedule.html', user=user, schedule_course=schedule_course, days=days, hours_combined=hours_combined, code_course= ficha, trimestre=trimestre_academico)     
         else:
             error = 'Ficha no encontrada'
-            return render_template('courses/schedule.html', error=error)
-    return render_template("courses/schedule.html", user=user)        
+            return render_template('courses/schedule.html', error=error, user=user, trimestre=trimestre_academico)
+    return render_template("courses/schedule.html", user=user, trimestre=trimestre_academico)        
     
 @app.route("/schedule_course_down")
 @login_required
@@ -110,7 +121,7 @@ def schedule_course_down():
 def complaints():    
     user = session["user"]
     comp_students= complaints_students()
-    return render_template("courses/complaints.html", user=user, comp_students=comp_students)
+    return render_template("courses/complaints.html", user=user, comp_students=comp_students, trimestre=trimestre_academico)
 
 @app.route("/upload_competences", methods=["GET", "POST"])
 @login_required
@@ -142,8 +153,8 @@ def history_complaints():
             return render_template("courses/historyComplaints.html", data=data, user=user)
         else:
             return render_template("courses/historyComplaints.html", user=user, error='No se encontraron resultados')            
-    else:
-        return render_template("courses/historyComplaints.html", user=user)
+    
+    return render_template("courses/historyComplaints.html", user=user, trimestre_academico=trimestre_academico)
     
 @app.route("/schedule_instructors", methods=["GET", "POST"])
 @login_required
@@ -193,8 +204,57 @@ def users_state_change():
         else:
             flash('Error al cambiar el estado', 'error')
             return redirect(url_for("users")) 
-    
-    
+
+@app.route("/users_register", methods=["GET", "POST"])
+@login_required
+def users_register():           
+    if request.method == "POST":
+        name = request.form["name"]
+        document = request.form["document"]
+        email = request.form["email"]
+        phone = request.form["phone"]
+        gender = request.form["gender"]
+        contract_type = request.form["contract_type"]
+        role = request.form["role"]
+        registro = register_user(name, document, email, phone, gender, contract_type, role)
+        if registro:
+            flash('Usuario registrado correctamente', 'success')
+            return redirect(url_for("users"))         
+        else:
+            flash('El usuario ya se encuentra registrado', 'error')
+            return redirect(url_for("users"))
+
+@app.route("/users_update/<id>", methods=["GET", "POST"])
+@login_required
+def users_update(id):               
+    if request.method == "POST":
+        name = request.form["name"]
+        document = request.form["document"]
+        email = request.form["email"]
+        phone = request.form["phone"]
+        gender = request.form["gender"]
+        contract_type = request.form["contract_type"]
+        role = request.form["role"]
+        print(id, name, document, email, phone, gender, contract_type, role)
+        update = update_user(id, name, document, email, phone, gender, contract_type, role)
+        if update:
+            flash('Usuario actualizado correctamente', 'success')
+            return redirect(url_for("users"))         
+        else:
+            flash('Error al actualizar el usuario', 'error')
+            return redirect(url_for("users"))
+  
+@app.route("/users_delete/<id>", methods=["GET", "POST"])
+@login_required
+def users_delete(id):  
+    delete = delete_user(id)
+    if delete:
+        flash('Usuario eliminado correctamente', 'success')
+        return redirect(url_for("users"))         
+    else:
+        flash('Error al eliminar el usuario', 'error')        
+        return redirect(url_for("users"))    
+   
 
 if __name__ == '__main__':
     app.run(debug=True)

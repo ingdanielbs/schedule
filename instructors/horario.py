@@ -17,7 +17,7 @@ def get_horario_i(instructor_name, trimestre):
     
     df = df.drop(['Source', 'TITULAR', 'COMPETENCIA', 'RAP 1', 'RAP 2', 'RAP 3', 'RAP 4', 'RAP 5', 'RAP 6', 'NC2', 'HORAS_SEMANAL', 'NN2', 'HORAS_SEMANAL',], axis=1)
     
-    df['NOMBRE_COMPETENCIA'] = df['NOMBRE_COMPETENCIA'].str.split('-').str[1].str.strip()
+    df['NOMBRE_COMPETENCIA'] = df['NOMBRE_COMPETENCIA'].str.split('-').str[-1].str.strip()
 
     df['INSTRUCTOR'] = df['INSTRUCTOR'].str.upper()
 

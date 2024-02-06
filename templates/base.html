@@ -67,20 +67,22 @@
                 <a class="nav-link custom-tooltip" href="{{ url_for('dashboard') }}" data-bs-toggle="tooltip"
                     data-bs-placement="right" title="Dashboard">
                     <i class="material-icons-outlined">home</i></a>
-                    {% if user['role'] == 'INSTRUCTOR' or user['role'] == 'INSTRUCTOR_APOYO' %}
+                {% if user['role'] == 'INSTRUCTOR' or user['role'] == 'INSTRUCTOR_APOYO' %}
                 <a class="nav-link" href="{{ url_for('schedule') }}" data-bs-toggle="tooltip" data-bs-placement="right"
                     title="Horario Instructor">
                     <i class="material-icons-outlined">event</i></a>
                 {% endif %}
-                    {% if user['role'] == 'COORDINADOR' or user['role'] == 'APOYO_COORDINADOR' or user['role'] == 'ADMINISTRADOR' or user['role'] == 'INSTRUCTOR_APOYO' %}
+                {% if user['role'] == 'COORDINADOR' or user['role'] == 'APOYO_COORDINADOR' or user['role'] ==
+                'ADMINISTRADOR' or user['role'] == 'INSTRUCTOR_APOYO' %}
                 <a class="nav-link" href="{{ url_for('schedule_instructors') }}" data-bs-toggle="tooltip"
                     data-bs-placement="right" title="Horario Instructores">
                     <i class="material-icons-outlined">calendar_month</i></a>
-                    {% endif %}
+                {% endif %}
                 <a class="nav-link" href="{{ url_for('course_schedule') }}" data-bs-toggle="tooltip"
                     data-bs-placement="right" title="Horario Fichas">
                     <i class="material-icons-outlined">school</i></a>
-                    {% if user['role'] == 'COORDINADOR' or user['role'] == 'APOYO_COORDINADOR' or user['role'] == 'ADMINISTRADOR' or user['role'] == 'INSTRUCTOR_APOYO' %}
+                {% if user['role'] == 'COORDINADOR' or user['role'] == 'APOYO_COORDINADOR' or user['role'] ==
+                'ADMINISTRADOR' or user['role'] == 'INSTRUCTOR_APOYO' %}
                 <a class="nav-link" href="{{ url_for('schedule_classroom') }}" data-bs-toggle="tooltip"
                     data-bs-placement="right" title="Horario Ambientes">
                     <i class="material-icons-outlined">meeting_room</i></a>
@@ -91,6 +93,11 @@
                 <a class="nav-link" href="{{ url_for('history_complaints') }}" data-bs-toggle="tooltip"
                     data-bs-placement="right" title="Historial de comité"><i
                         class="material-icons-outlined">layers</i></a>
+                {% if user['role'] == 'ADMINISTRADOR' %}
+                <a class="nav-link" href="{{ url_for('users') }}" data-bs-toggle="tooltip"
+                    data-bs-placement="right" title="Usuarios"><i
+                        class="material-icons-outlined">group</i></a>
+                {% endif %}
                 <!-- <a class="nav-link" href="ecommerce-products.html"><i class="material-icons-outlined" title="Actualizar juicios">update</i></a> -->
                 <!-- <a class="nav-link" href="javascript:;"><i class="material-icons-outlined">poll</i></a> -->
             </nav>
