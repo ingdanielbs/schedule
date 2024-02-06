@@ -68,7 +68,7 @@ def dashboard():
     quantity_courses = count_courses()            
     return render_template("instructors/dashboard.html", user=user, hours_trimestre=hours_trimestre, quantity_groups=quantity_groups, titular=titular, quantity_no_approved=quantity_no_approved, trimestre=trimestre_academico, students_not_approved=students_not_approved, apprentices_report=apprentices_report, quantity_instructors=quantity_instructors, quantity_no_approved_rap=quantity_no_approved_rap, quantity_courses=quantity_courses)
 
-@app.route("/schedule")
+@app.route("/schedule", methods=["GET", "POST"])
 @login_required
 def schedule():     
     user = session["user"]    
