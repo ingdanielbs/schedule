@@ -83,15 +83,17 @@
                         </thead>
                         <tbody>
                             {% for detalle in schedule.detalles['key'] %}
+                                {% for det in detalle %}
                             <tr>
-                                <td>{{ detalle[0].FICHA }}</td>
-                                <td>{{ detalle[0].TRIMESTRE }}</td>
-                                <td>{{ detalle[0].PROGRAMA }}</td>
-                                <td>{{ detalle[0].PALABRA_CLAVE }}</td>
-                                <td>{{ detalle[0].NCL }}</td>
-                                <td>{{ detalle[0].COMPETENCIA }}</td>
-                                <td>{{ detalle[0].RAP }}</td>
+                                <td>{{ det.FICHA }}</td>
+                                <td>{{ det.TRIMESTRE }}</td>
+                                <td>{{ det.PROGRAMA }}</td>
+                                <td>{{ det.PALABRA_CLAVE }}</td>
+                                <td>{{ det.NCL }}</td>
+                                <td>{{ det.COMPETENCIA }}</td>
+                                <td>{{ det.RAP }}</td>
                             </tr>
+                                {% endfor %}    
                             {% endfor %}
                         </tbody>
                     </table>

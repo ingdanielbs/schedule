@@ -56,7 +56,6 @@ def get_horario_i(instructor_name, trimestre):
                         detalles_set.add(detalle_tuple)
     
     horario_instructor['detalles'] = detalles
-
     return horario_instructor
 
 def get_horario_instructor(name_instructor, trimestre):    
