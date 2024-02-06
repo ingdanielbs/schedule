@@ -11,7 +11,11 @@ from instructors.horario import apprentices_to_report, get_sum_horas, get_cant_f
 
 import pandas as pd
 
+from datetime import timedelta
+
+
 app = Flask(__name__)
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=15)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/' 
 
 days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
@@ -25,11 +29,17 @@ def login():
     global user
     error = None
     if request.method == "POST":
+        remember = 'remember' in request.form
+        print(remember)
         username = request.form["username"]        
         user = loguear(username)               
         if user and user["status"]:
             session["username"] = username
-            session["user"] = user           
+            session["user"] = user
+            if remember:
+                session.permanent = True
+            else:
+                session.permanent = False           
             return redirect(url_for("dashboard"))             
         else:
             error = 'Usuario no registrado'
