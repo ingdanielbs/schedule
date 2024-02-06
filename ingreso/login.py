@@ -1,5 +1,6 @@
 import pandas as pd
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 user = "sara"
 password = "sara2024"
@@ -38,8 +39,9 @@ def get_users():
         collection = db["users"]
         users = collection.find()    
         data = list(users)
-        df = pd.DataFrame(data)    
+        df = pd.DataFrame(data)
         return df.to_dict('records') if len(df) > 0 else None
+        
     return None
    
 def change_status(document):    
@@ -54,4 +56,56 @@ def change_status(document):
             client.close()
             return True
     return False
+
+""" 
+name, document, email, phone, gender, contract_type, status, image, role
+"""
+
+def register_user(name, document, email, phone, gender, contract_type, role):
+    client = connect()
+    if client:
+        db = client["sara"]
+        collection = db["users"]
+        user = collection.find_one({"document": document})
+        if not user:
+            data = {
+                "name": name.upper(), 
+                "document": document, 
+                "email": email, 
+                "phone": phone, 
+                "gender": gender,
+                "contract_type": contract_type,
+                "status": True,
+                "image": "NULL",
+                "role": role
+            }
+            collection.insert_one(data)
+            client.close()
+            return True    
+    return False
+
+def update_user(id, name, document, email, phone, gender, contract_type, role):
+    client = connect()
+    if client:
+        db = client["sara"]
+        collection = db["users"]
+        user = collection.find_one({"_id": ObjectId(id)})         
+        if user:
+            collection.update_one({"_id": ObjectId(id)}, {"$set": {"document":document, "name": name.upper(), "email": email, "phone": phone, 'gender': gender, 'contract_type': contract_type, 'role': role}})
+            client.close()
+            return True
+    return False
+
+def delete_user(id):
+    client = connect()
+    if client:
+        db = client["sara"]
+        collection = db["users"]
+        user = collection.find_one({"_id": ObjectId(id)})
+        if user:
+            collection.delete_one({"_id": ObjectId(id)})
+            client.close()
+            return True
+    return False
+ 
 

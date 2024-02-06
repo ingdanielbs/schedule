@@ -6,7 +6,7 @@ from courses.competences import join_files
 from courses.complaint import committe_history, complaints_students
 from courses.horario_courses import get_schedule_course, generar_excel_course
 from decorators.decorators import login_required
-from ingreso.login import change_status, get_users, loguear
+from ingreso.login import change_status, delete_user, get_users, loguear, register_user, update_user
 from instructors.horario import apprentices_to_report, get_sum_horas, get_cant_fichas, get_fichas_titular, cant_no_aprobados, not_approved_students, get_horario_i, generar_excel
 
 import pandas as pd
@@ -193,8 +193,57 @@ def users_state_change():
         else:
             flash('Error al cambiar el estado', 'error')
             return redirect(url_for("users")) 
-    
-    
+
+@app.route("/users_register", methods=["GET", "POST"])
+@login_required
+def users_register():           
+    if request.method == "POST":
+        name = request.form["name"]
+        document = request.form["document"]
+        email = request.form["email"]
+        phone = request.form["phone"]
+        gender = request.form["gender"]
+        contract_type = request.form["contract_type"]
+        role = request.form["role"]
+        registro = register_user(name, document, email, phone, gender, contract_type, role)
+        if registro:
+            flash('Usuario registrado correctamente', 'success')
+            return redirect(url_for("users"))         
+        else:
+            flash('El usuario ya se encuentra registrado', 'error')
+            return redirect(url_for("users"))
+
+@app.route("/users_update/<id>", methods=["GET", "POST"])
+@login_required
+def users_update(id):               
+    if request.method == "POST":
+        name = request.form["name"]
+        document = request.form["document"]
+        email = request.form["email"]
+        phone = request.form["phone"]
+        gender = request.form["gender"]
+        contract_type = request.form["contract_type"]
+        role = request.form["role"]
+        print(id, name, document, email, phone, gender, contract_type, role)
+        update = update_user(id, name, document, email, phone, gender, contract_type, role)
+        if update:
+            flash('Usuario actualizado correctamente', 'success')
+            return redirect(url_for("users"))         
+        else:
+            flash('Error al actualizar el usuario', 'error')
+            return redirect(url_for("users"))
+  
+@app.route("/users_delete/<id>", methods=["GET", "POST"])
+@login_required
+def users_delete(id):  
+    delete = delete_user(id)
+    if delete:
+        flash('Usuario eliminado correctamente', 'success')
+        return redirect(url_for("users"))         
+    else:
+        flash('Error al eliminar el usuario', 'error')        
+        return redirect(url_for("users"))    
+   
 
 if __name__ == '__main__':
     app.run(debug=True)
