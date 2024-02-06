@@ -153,8 +153,8 @@ def history_complaints():
             return render_template("courses/historyComplaints.html", data=data, user=user)
         else:
             return render_template("courses/historyComplaints.html", user=user, error='No se encontraron resultados')            
-    else:
-        return render_template("courses/historyComplaints.html", user=user, trimestre_academico=trimestre_academico)
+    
+    return render_template("courses/historyComplaints.html", user=user, trimestre_academico=trimestre_academico)
     
 @app.route("/schedule_instructors", methods=["GET", "POST"])
 @login_required
