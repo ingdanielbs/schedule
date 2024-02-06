@@ -6,7 +6,7 @@ from courses.competences import join_files
 from courses.complaint import committe_history, complaints_students
 from courses.horario_courses import get_schedule_course, generar_excel_course
 from decorators.decorators import login_required
-from ingreso.login import change_status, delete_user, get_users, loguear, register_user, update_user
+from ingreso.login import change_status, delete_user, get_users, instructor_list, loguear, register_user, update_user
 from instructors.horario import apprentices_to_report, get_sum_horas, get_cant_fichas, get_fichas_titular, cant_no_aprobados, not_approved_students, get_horario_i, generar_excel
 
 import pandas as pd
@@ -162,6 +162,8 @@ def schedule_instructors():
     user = session["user"]
     df = pd.read_excel('static/datalog/datos.xls')    
     instructors = list(df[df['role'] == 'INSTRUCTOR']['name'].sort_values())
+    """ instructors = instructor_list() """   
+      
     if request.method == "POST":        
         hours_combined = zip(hours, hours_f)
         name_i = request.form["instructor_name"]       

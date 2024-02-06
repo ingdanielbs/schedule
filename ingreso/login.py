@@ -109,3 +109,8 @@ def delete_user(id):
     return False
  
 
+def instructor_list():
+    instructors = get_users()    
+    instructors = [instructor for instructor in instructors if instructor["role"] in ["INSTRUCTOR", "INSTRUCTOR_APOYO"] ]
+       
+    return instructors
