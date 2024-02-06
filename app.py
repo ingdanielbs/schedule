@@ -162,9 +162,7 @@ def schedule_instructors():
     user = session["user"]
     df = pd.read_excel('static/datalog/datos.xls') 
     """ lista con los nombres de los instructores donde el rol es INSTRUCTOR y INSTRUCTOR_APOYO ordenados alfabeticamente """    
-    instructors = list(df[(df['role'] == 'INSTRUCTOR') | (df['role'] == 'INSTRUCTOR_APOYO')]['name'].sort_values())
-    
-      
+    instructors = list(df[(df['role'] == 'INSTRUCTOR') | (df['role'] == 'INSTRUCTOR_APOYO')]['name'].sort_values())      
       
     if request.method == "POST":        
         hours_combined = zip(hours, hours_f)
