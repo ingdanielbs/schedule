@@ -28,9 +28,10 @@ trimestre_academico = '1-2024'
 def login():
     global user
     error = None
+    if "username" in session:
+        return redirect(url_for("dashboard"))
     if request.method == "POST":
-        remember = 'remember' in request.form
-        print(remember)
+        remember = 'remember' in request.form        
         username = request.form["username"]        
         user = loguear(username)               
         if user and user["status"]:
