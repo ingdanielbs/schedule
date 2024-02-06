@@ -102,8 +102,8 @@ def course_schedule():
             return render_template('courses/schedule.html', user=user, schedule_course=schedule_course, days=days, hours_combined=hours_combined, code_course= ficha, trimestre=trimestre_academico)     
         else:
             error = 'Ficha no encontrada'
-            return render_template('courses/schedule.html', error=error)
-    return render_template("courses/schedule.html", user=user)        
+            return render_template('courses/schedule.html', error=error, user=user, trimestre=trimestre_academico)
+    return render_template("courses/schedule.html", user=user, trimestre=trimestre_academico)        
     
 @app.route("/schedule_course_down")
 @login_required
@@ -121,7 +121,7 @@ def schedule_course_down():
 def complaints():    
     user = session["user"]
     comp_students= complaints_students()
-    return render_template("courses/complaints.html", user=user, comp_students=comp_students)
+    return render_template("courses/complaints.html", user=user, comp_students=comp_students, trimestre=trimestre_academico)
 
 @app.route("/upload_competences", methods=["GET", "POST"])
 @login_required
@@ -154,7 +154,7 @@ def history_complaints():
         else:
             return render_template("courses/historyComplaints.html", user=user, error='No se encontraron resultados')            
     else:
-        return render_template("courses/historyComplaints.html", user=user)
+        return render_template("courses/historyComplaints.html", user=user, trimestre_academico=trimestre_academico)
     
 @app.route("/schedule_instructors", methods=["GET", "POST"])
 @login_required
