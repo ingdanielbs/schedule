@@ -96,6 +96,7 @@
                         </thead>
                         <tbody>
                             {% for detalle in schedule.detalles['key'] %}
+                                {% for det in detalle %}
                             <tr>
                                 <td>{{ detalle[0].FICHA }}</td>
                                 <td>{{ detalle[0].TRIMESTRE }}</td>
@@ -109,7 +110,9 @@
                                 <td>{{ detalle[0].RAP_SOFIA }}</td>
                                 {% endif %}
                             </tr>
+                                {% endfor %}
                             {% endfor %}
+
                         </tbody>
                     </table>
                 </div>
