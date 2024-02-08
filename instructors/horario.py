@@ -223,24 +223,23 @@ def generar_excel(schedule, nombre_archivo):
     row_num = 28
     for key, detail_list in details.items():
         for detail in detail_list:
-            for item in detail:
-                if 'FICHA' in item:
-                    hoja[f'A{row_num}'] = item['FICHA']
-                    hoja[f'A{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
-                    hoja[f'B{row_num}'] = item['TRIMESTRE']
-                    hoja[f'B{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
-                    hoja[f'C{row_num}'] = item['PROGRAMA']  
-                    hoja[f'C{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
-                    hoja[f'D{row_num}'] = item['PALABRA_CLAVE']
-                    hoja[f'D{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
-                    hoja[f'E{row_num}'] = item['NCL']
-                    hoja[f'E{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
-                    hoja[f'F{row_num}'] = item['COMPETENCIA']
-                    hoja[f'F{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
-                    hoja[f'G{row_num}'] = item['RAP']
-                    hoja[f'G{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
-                    row_num += 1
-    rango_celdas = hoja['A27:G27']
+            for item in detail:               
+                hoja[f'A{row_num}'] = item.get('FICHA', '')
+                hoja[f'A{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+                hoja[f'B{row_num}'] = item.get('TRIMESTRE', '')
+                hoja[f'B{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+                hoja[f'C{row_num}'] = item['PROGRAMA']  
+                hoja[f'C{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+                hoja[f'D{row_num}'] = item['PALABRA_CLAVE']
+                hoja[f'D{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+                hoja[f'E{row_num}'] = item['NCL']
+                hoja[f'E{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+                hoja[f'F{row_num}'] = item['COMPETENCIA']
+                hoja[f'F{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+                hoja[f'G{row_num}'] = item['RAP']
+                hoja[f'G{row_num}'].alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+                row_num += 1
+            rango_celdas = hoja['A27:G27']
     
     color_fondo = PatternFill(start_color='C5EAE8', end_color='C5EAE8', fill_type='solid')
     
