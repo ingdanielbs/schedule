@@ -10,8 +10,7 @@ def connect():
     try:
         client = MongoClient(conection_string)       
         return client 
-    except Exception as e:
-        print(f"Error connecting to MongoDB: {e}")
+    except Exception as e:        
         return None
 
 """ def loguear(document):    

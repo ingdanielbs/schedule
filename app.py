@@ -236,8 +236,7 @@ def users_update(id):
         phone = request.form["phone"]
         gender = request.form["gender"]
         contract_type = request.form["contract_type"]
-        role = request.form["role"]
-        print(id, name, document, email, phone, gender, contract_type, role)
+        role = request.form["role"]        
         update = update_user(id, name, document, email, phone, gender, contract_type, role)
         if update:
             flash('Usuario actualizado correctamente', 'success')
