@@ -13,7 +13,7 @@
                             <input class="form-control form-control-lg" list="instructor_list" name="instructor_name" id="instructor_name">
                         <datalist id="instructor_list">
                             {% for instructor in instructors %}
-                            <option value="{{ instructor }}">{{ instructor }}</option>
+                            <option value="{{ instructor.name }}">{{ instructor.name }}</option>
                             {% endfor %}
                         </datalist>
                         <button class="btn btn-outline-secondary" type="submit" id="button-addon2">

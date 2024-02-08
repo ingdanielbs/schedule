@@ -6,7 +6,6 @@ user = "sara"
 password = "sara2024"
 conection_string = f"mongodb+srv://{user}:{password}@cluster0.ll5vs9x.mongodb.net/?retryWrites=true&w=majority"
 
-
 def connect():
     try:
         client = MongoClient(conection_string)       
@@ -20,7 +19,6 @@ def connect():
     df = df[df['document'] == int(document)]    
     df = df.to_dict('records') 
     return df[0] if len(df) > 0 else None """
-
 
 def loguear(document):
     client = connect()
@@ -40,8 +38,7 @@ def get_users():
         users = collection.find()    
         data = list(users)
         df = pd.DataFrame(data)
-        return df.to_dict('records') if len(df) > 0 else None
-        
+        return df.to_dict('records') if len(df) > 0 else None        
     return None
    
 def change_status(document):    
@@ -56,10 +53,6 @@ def change_status(document):
             client.close()
             return True
     return False
-
-""" 
-name, document, email, phone, gender, contract_type, status, image, role
-"""
 
 def register_user(name, document, email, phone, gender, contract_type, role):
     client = connect()
@@ -106,11 +99,11 @@ def delete_user(id):
             collection.delete_one({"_id": ObjectId(id)})
             client.close()
             return True
-    return False
- 
+    return False 
 
 def instructor_list():
     instructors = get_users()    
     instructors = [instructor for instructor in instructors if instructor["role"] in ["INSTRUCTOR", "INSTRUCTOR_APOYO"] ]
-       
+    """ ordenar por name """       
+    instructors = sorted(instructors, key=lambda x: x["name"])
     return instructors
