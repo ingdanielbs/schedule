@@ -33,7 +33,7 @@ def login():
     if request.method == "POST":
         remember = 'remember' in request.form        
         username = request.form["username"]        
-        user = loguear(username)               
+        user = loguear(username)             
         if user and user['status']:
             session["username"] = username
             session["user"] = user
