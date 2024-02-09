@@ -98,10 +98,14 @@ def course_schedule():
         ficha = request.form["ficha"].strip()
         session['ficha_down'] = ficha
         if ficha:
-            schedule_course = get_schedule_course(ficha, trimestre_academico)              
-            return render_template('courses/schedule.html', user=user, schedule_course=schedule_course, days=days, hours_combined=hours_combined, code_course= ficha, trimestre=trimestre_academico)     
+            try:
+                schedule_course = get_schedule_course(ficha, trimestre_academico)              
+                return render_template('courses/schedule.html', user=user, schedule_course=schedule_course, days=days, hours_combined=hours_combined, code_course= ficha, trimestre=trimestre_academico)     
+            except:
+                error = 'Ficha no encontrada'
+                return render_template('courses/schedule.html', error=error, user=user, trimestre=trimestre_academico)
         else:
-            error = 'Ficha no encontrada'
+            error = 'Ingrese una ficha'
             return render_template('courses/schedule.html', error=error, user=user, trimestre=trimestre_academico)
     return render_template("courses/schedule.html", user=user, trimestre=trimestre_academico)        
     
