@@ -26,7 +26,10 @@ def loguear(document):
         collection = db["users"]
         user = collection.find_one({"document": document})
         client.close()
-        return {"name": user["name"], "document": user["document"], "email": user["email"], "phone:": user["phone"], "role": user["role"], "status": user["status"], "gender": user["gender"], "contract_type": user["contract_type"]} 
+        if user:
+            return {"name": user["name"], "document": user["document"], "email": user["email"], "phone:": user["phone"], "role": user["role"], "status": user["status"], "gender": user["gender"], "contract_type": user["contract_type"]} 
+        else:
+            return None        
     return None
 
 def get_users():
