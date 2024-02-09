@@ -34,7 +34,7 @@ def login():
         remember = 'remember' in request.form        
         username = request.form["username"]        
         user = loguear(username)               
-        if user and user["status"]:
+        if user:
             session["username"] = username
             session["user"] = user
             if remember:
