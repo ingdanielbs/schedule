@@ -4,6 +4,7 @@ from coordination.classroom_schedule import get_horario_ambiente
 from coordination.dashboard import count_courses, count_instructors, count_not_approved_rap
 from courses.competences import join_files
 from courses.complaint import committe_history, complaints_students
+from courses.courses_db import insert_course, insert_courses_students
 from courses.horario_courses import get_schedule_course, generar_excel_course
 from decorators.decorators import login_required
 from ingreso.login import change_status, delete_user, get_users, instructor_list, loguear, register_user, update_user
@@ -138,6 +139,28 @@ def upload_competences():
         file.save(os.path.join("static/course-competences", code_course + ".xls"))
         return redirect(url_for("upload_competences"))            
     return render_template("courses/uploadCompetences.html", user=user)
+
+@app.route("/upload_students", methods=["GET", "POST"])
+@login_required
+def upload_students():    
+    files = os.listdir("static/course-students")
+    for file in files:
+        os.remove(os.path.join("static/course-students", file))
+    user = session["user"]    
+    if request.method == "POST":
+        files = request.files.getlist("files")        
+        for file in files:
+            file.save(os.path.join("static/course-students", file.filename))        
+        files_folder = os.listdir("static/course-students")        
+        
+        for f in files_folder:           
+            if insert_course(f):
+                insert_courses_students(f)
+                flash('Fichas registradas correctamente', 'success')                
+            else:
+                flash('Error al registrar las fichas', 'error')
+        return redirect(url_for("upload_students"))
+    return render_template("courses/uploadStudents.html", user=user)
 
 @app.errorhandler(404)
 def page_not_found(e):
