@@ -5,7 +5,7 @@ from coordination.classroom_schedule import get_horario_ambiente
 from coordination.dashboard import count_courses, count_instructors, count_instructors_contract, count_not_approved_rap, count_students_status
 from courses.competences import join_files
 from courses.complaint import committe_history, complaints_students
-from courses.courses_db import insert_course, insert_courses_students
+from courses.courses_db import insert_course, insert_courses_competences, insert_courses_students
 from courses.horario_courses import get_schedule_course, generar_excel_course
 from decorators.decorators import login_required
 from ingreso.login import change_status, delete_user, get_users, instructor_list, loguear, register_user, update_user
@@ -78,6 +78,9 @@ def schedule():
     user = session["user"]    
     hours_combined = zip(hours, hours_f)
     schedule = get_horario_i(user['name'], trimestre_academico)       
+    if request.method == 'POST':
+        htrimestre = request.form["htrimestre"]        
+        schedule = get_horario_i(user['name'], htrimestre)
     return render_template("instructors/schedule.html", user=user, schedule=schedule, days=days, hours_combined=hours_combined, trimestre= trimestre_academico)
 
 @app.route("/schedule_down")
@@ -134,13 +137,23 @@ def complaints():
 @app.route("/upload_competences", methods=["GET", "POST"])
 @login_required
 def upload_competences():    
-    user = session["user"]
-    join_files()
+    files = os.listdir("static/course-competences")
+    for file in files:
+        os.remove(os.path.join("static/course-competences", file))
+    user = session["user"]    
     if request.method == "POST":
-        code_course = request.form["code_course"]
-        file = request.files["file"]           
-        file.save(os.path.join("static/course-competences", code_course + ".xls"))
-        return redirect(url_for("upload_competences"))            
+        files = request.files.getlist("files")        
+        for file in files:
+            file.save(os.path.join("static/course-competences", file.filename))        
+        files_folder = os.listdir("static/course-competences")        
+        
+        for f in files_folder:           
+            try:
+                insert_courses_competences(f)
+                flash('Competencias registradas correctamente', 'success')
+            except:
+                flash('Error al registrar las competencias', 'error')
+        return redirect(url_for("upload_competences"))
     return render_template("courses/uploadCompetences.html", user=user)
 
 @app.route("/upload_students", methods=["GET", "POST"])
@@ -189,11 +202,8 @@ def history_complaints():
 @app.route("/schedule_instructors", methods=["GET", "POST"])
 @login_required
 def schedule_instructors():    
-    user = session["user"]
-    df = pd.read_excel('static/datalog/datos.xls')    
-    """ instructors = list(df[(df['role'] == 'INSTRUCTOR') | (df['role'] == 'INSTRUCTOR_APOYO')]['name'].sort_values()) """
-    instructors = instructor_list()      
-      
+    user = session["user"]   
+    instructors = instructor_list()            
     if request.method == "POST":        
         hours_combined = zip(hours, hours_f)
         name_i = request.form["instructor_name"]       
