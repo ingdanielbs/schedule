@@ -100,8 +100,12 @@
                 <a class="nav-link" href="{{ url_for('upload_students') }}" data-bs-toggle="tooltip"
                         data-bs-placement="right" title="Subir info estudiantes"><i
                             class="material-icons-outlined">upload_file</i></a>
+                            <a class="nav-link" href="{{ url_for('upload_students') }}" data-bs-toggle="tooltip"
+                            data-bs-placement="right" title="Subir juicios">
+                                <i class="material-icons-outlined">update</i>
+                            </a>
                 {% endif %}
-                <!-- <a class="nav-link" href="ecommerce-products.html"><i class="material-icons-outlined" title="Actualizar juicios">update</i></a> -->
+                
                 <!-- <a class="nav-link" href="javascript:;"><i class="material-icons-outlined">poll</i></a> -->
             </nav>
         </div>
@@ -134,7 +138,13 @@
                         material-icons-outlined mx-2">manage_search</i>Quejas académicas</a>
                     <a class="nav-link" href="{{ url_for('history_complaints') }}"><i class="
                         material-icons-outlined mx-2">layers</i>Historial de comité</a>
+
+                    <a href="{{ url_for('logout') }}"
+                        class="mt-5 list-group-item list-group-item-action d-flex align-items-center gap-2 border-bottom"><i
+                            class="material-icons-outlined">power_settings_new</i>Cerrar sesión</a>
                 </ul>
+
+                
             </nav>
         </div>
 
