@@ -3,7 +3,7 @@ import os
 from flask import Flask, flash, render_template, request, redirect, url_for, session, send_file, jsonify
 from coordination.classroom_schedule import get_horario_ambiente
 from coordination.dashboard import count_courses, count_instructors, count_instructors_contract, count_not_approved_rap, count_students_status
-from courses.competences import join_files
+from courses.competences import join_files, rename_files
 from courses.complaint import committe_history, complaints_students
 from courses.courses_db import insert_course, insert_courses_competences, insert_courses_students
 from courses.horario_courses import get_schedule_course, generar_excel_course
@@ -140,23 +140,17 @@ def upload_competences():
     directory = "static/course-competences"    
     if not os.path.exists(directory):
         os.makedirs(directory)    
-    files = os.listdir("static/course-competences")
-    for file in files:
-        os.remove(os.path.join("static/course-competences", file))
     user = session["user"]    
     if request.method == "POST":
         files = request.files.getlist("files")        
         for file in files:
-            file.save(os.path.join("static/course-competences", file.filename))        
-        files_folder = os.listdir("static/course-competences")        
+            file.save(os.path.join("static/course-competences", file.filename))
         
-        for f in files_folder:           
-            try:
-                insert_courses_competences(f)
-                flash('Competencias registradas correctamente', 'success')
-            except:
-                flash('Error al registrar las competencias', 'error')
-        return redirect(url_for("upload_competences"))
+        if rename_files():
+            join_files()
+            flash('Competencias registradas correctamente', 'success')
+        else:
+            flash('Error al registrar las competencias', 'error')
     return render_template("courses/uploadCompetences.html", user=user)
 
 @app.route("/upload_students", methods=["GET", "POST"])

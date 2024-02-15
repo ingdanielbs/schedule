@@ -1,22 +1,32 @@
 import os
 import pandas as pd
+import shutil
+
+def rename_files():
+    carpeta = 'static/course-competences'
+    archivos = [archivo for archivo in os.listdir(carpeta) if archivo.endswith('.xls')]
+    try:
+        for archivo in archivos:
+            ruta = os.path.join(carpeta, archivo)
+            hoja = pd.read_excel(ruta)
+            nombre = hoja.iloc[1, 2]
+            nuevo_nombre = os.path.join(carpeta, str(nombre) + '.xls')
+            shutil.move(ruta, nuevo_nombre)
+        return True
+    except:
+        return False
 
 def join_files():
     carpeta = 'static/course-competences'
+    archivos = [archivo for archivo in os.listdir(carpeta) if archivo.endswith('.xls')]    
 
-    # Obtener la lista de archivos XLSX en la carpeta
-    archivos = [archivo for archivo in os.listdir(carpeta) if archivo.endswith('.xls')]
-
-        # Crear una lista vacía para almacenar los datos de cada hoja
     datos_hojas = []
 
-        # Iterar sobre cada archivo y leer todas las hojas
     for archivo in archivos:
         ruta_archivo = os.path.join(carpeta, archivo)
         xls = pd.ExcelFile(ruta_archivo)
         nombre_hojas = xls.sheet_names
             
-        # Iterar sobre cada hoja del archivo actual y agregarla a la lista de datos
         for hoja in nombre_hojas:
             datos_hoja = pd.read_excel(ruta_archivo, sheet_name=hoja)
                 
@@ -27,7 +37,6 @@ def join_files():
                 
             datos_hojas.append(datos_hoja)
 
-        # Concatenar los datos de todas las hojas en un solo DataFrame
     datos_completos = pd.concat(datos_hojas)
     datos_completos.to_excel('static/competencias.xlsx', index=False)
     datos_completos.to_json('static/competencias.json', orient='records')
