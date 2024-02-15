@@ -2,7 +2,7 @@ import json
 import os
 from flask import Flask, flash, render_template, request, redirect, url_for, session, send_file, jsonify
 from coordination.classroom_schedule import get_horario_ambiente
-from coordination.dashboard import count_courses, count_instructors, count_instructors_contract, count_not_approved_rap, count_students_status
+from coordination.dashboard import count_courses, count_courses_program, count_instructors, count_instructors_contract, count_instructors_gender, count_not_approved_rap, count_students_program, count_students_status
 from courses.competences import join_files, rename_files
 from courses.complaint import committe_history, complaints_students
 from courses.courses_db import insert_course, insert_courses_competences, insert_courses_students
@@ -60,7 +60,10 @@ def logout():
 def dashboard():    
     user = session["user"]   
     instructors_contract = count_instructors_contract()
-    count_students=count_students_status()   
+    count_students=count_students_status()  
+    count_instructors_gen =  count_instructors_gender()
+    count_students_pro = count_students_program()
+    count_courses_pro = count_courses_program()
     titular = get_fichas_titular(user['name'], trimestre_academico)            
     hours_trimestre = get_sum_horas(user['name'], trimestre_academico)
     quantity_groups = get_cant_fichas(user['name'], trimestre_academico)
@@ -70,7 +73,7 @@ def dashboard():
     quantity_instructors = count_instructors() 
     quantity_no_approved_rap = len(count_not_approved_rap())
     quantity_courses = count_courses()            
-    return render_template("instructors/dashboard.html", user=user, hours_trimestre=hours_trimestre, quantity_groups=quantity_groups, titular=titular, quantity_no_approved=quantity_no_approved, trimestre=trimestre_academico, students_not_approved=students_not_approved, apprentices_report=apprentices_report, quantity_instructors=quantity_instructors, quantity_no_approved_rap=quantity_no_approved_rap, quantity_courses=quantity_courses, instructors_contract=json.dumps(instructors_contract), count_students=json.dumps(count_students))
+    return render_template("instructors/dashboard.html", user=user, hours_trimestre=hours_trimestre, quantity_groups=quantity_groups, titular=titular, quantity_no_approved=quantity_no_approved, trimestre=trimestre_academico, students_not_approved=students_not_approved, apprentices_report=apprentices_report, quantity_instructors=quantity_instructors, quantity_no_approved_rap=quantity_no_approved_rap, quantity_courses=quantity_courses, instructors_contract=json.dumps(instructors_contract), count_students=json.dumps(count_students), count_instructors_gen=json.dumps(count_instructors_gen), count_students_pro=json.dumps(count_students_pro), count_courses_pro=json.dumps(count_courses_pro))
 
 @app.route("/schedule", methods=["GET", "POST"])
 @login_required

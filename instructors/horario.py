@@ -264,7 +264,7 @@ def cant_no_aprobados(document):
 def not_approved_students(not_approved):    
     students = {}    
     for item in not_approved:
-        students[item['nmero_documento']] = {'nombre_completo': item['nombre'] + ' ' + item['apellidos'], 'documento': item['nmero_documento'], 'ficha': item['ficha']}   
+        students[item['numero_documento']] = {'nombre_completo': item['nombre'] + ' ' + item['apellidos'], 'documento': item['numero_documento'], 'ficha': item['ficha']}   
     
     return students
 

@@ -42,11 +42,45 @@ def count_students_status():
     with open('static/competencias.json', 'r', encoding='utf-8') as archivo_json:
         data = json.load(archivo_json)
         data = pd.DataFrame(data)
+        data = data.drop_duplicates(subset='numero_documento', keep='first')
         data = data['estado'].value_counts()
         return data.to_dict() if len(data) > 0 else None
     return None
+
+def count_students_program():
+    with open('static/competencias.json', 'r', encoding='utf-8') as archivo_json:
+        data = json.load(archivo_json)
+        data = pd.DataFrame(data)
+        data = data[data['estado'].isin(['EN FORMACION', 'INDUCCION', 'TRASLADADO', 'CONDICIONADO', 'APLAZADO'])]
+        """ Dejar valores unicos en numero_documento """
+        data = data.drop_duplicates(subset='numero_documento', keep='first')
+        data = data['programa'].value_counts()        
+        return data.to_dict() if len(data) > 0 else None
+    return None
+
+def count_courses_program():
+    with open('static/competencias.json', 'r', encoding='utf-8') as archivo_json:
+        data = json.load(archivo_json)
+        data = pd.DataFrame(data)        
+        data = data.drop_duplicates(subset='ficha', keep='first')
+        data = data['programa'].value_counts()        
+        return data.to_dict() if len(data) > 0 else None
+    return None
         
+
+def count_instructors_gender():
+    client = connect()
+    if client:
+        db = client["sara"]
+        collection = db["users"]        
+        users = collection.find()        
+        data = list(users)
+        df = pd.DataFrame(data)
+        df = df[df['role'].isin(['INSTRUCTOR', 'INSTRUCTOR_APOYO'])]
+        gender_counts = df['gender'].value_counts()
+        return gender_counts.to_dict() if len(gender_counts) > 0 else None
         
+
 
 
 

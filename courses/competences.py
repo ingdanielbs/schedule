@@ -31,9 +31,11 @@ def join_files():
             datos_hoja = pd.read_excel(ruta_archivo, sheet_name=hoja)
                 
             numero_ficha = datos_hoja.iloc[1, 2]
+            programa = datos_hoja.iloc[4, 2]
             datos_hoja = datos_hoja.drop([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
-            datos_hoja.columns = ['tipo_documento', 'nmero_documento', 'nombre', 'apellidos', 'estado', 'competencia', 'rap', 'juicio', 'funcionario']
+            datos_hoja.columns = ['tipo_documento', 'numero_documento', 'nombre', 'apellidos', 'estado', 'competencia', 'rap', 'juicio', 'funcionario']
             datos_hoja['ficha'] = numero_ficha
+            datos_hoja['programa'] = programa
                 
             datos_hojas.append(datos_hoja)
 

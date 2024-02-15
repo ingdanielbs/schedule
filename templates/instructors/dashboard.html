@@ -183,20 +183,48 @@
     {% endif %}
     {% if user.role == "COORDINADOR" or user.role == "APOYO_COORDINADOR" or user['role'] == 'ADMINISTRADOR' %}
     <div class="row">
-      <div class="col-12 col-xl-5">
+      <div class="col-12 col-xl-4">
         <div class="card w-100 rounded-4">
           <div class="card-body">                         
                 <h5 class="mb-0 fw-bold">Instructores por tipo de contrato</h5>
-                <div id="chart"></div>            
+                <div id="chart" style="height: 330px;"></div>            
           </div>
         </div>
       </div>
 
-      <div class="col-12 col-xl-5">
+      <div class="col-12 col-xl-4">
+        <div class="card w-100 rounded-4">
+          <div class="card-body">                         
+                <h5 class="mb-0 fw-bold">Instructores por género</h5>
+                <div id="chartGender" style="height: 330px;"></div>            
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-xl-4">
         <div class="card w-100 rounded-4">
           <div class="card-body">                         
                 <h5 class="mb-0 fw-bold">Aprendices por estado de formación</h5>
-                <div id="chartStudent"></div>            
+                <div id="chartStudent" style="height: 330px;"></div>            
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-xl-6">
+        <div class="card w-100 rounded-4">
+          <div class="card-body">                         
+                <h5 class="mb-0 fw-bold">Aprendices activos por programa</h5>
+                <div id="chartProgram" style="height: 330px;"></div>            
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-6">
+        <div class="card w-100 rounded-4">
+          <div class="card-body">                         
+                <h5 class="mb-0 fw-bold">Fichas por programa</h5>
+                <div id="chartCourses" style="height: 330px;"></div>            
           </div>
         </div>
       </div>
@@ -215,6 +243,18 @@
   let data2 = {{ count_students | safe}};
   let values2 = Object.values(data2);
   let labels2 = Object.keys(data2);
+
+  let data3 = {{ count_instructors_gen | safe}};
+  let values3 = Object.values(data3);
+  let labels3 = Object.keys(data3);
+
+  let data4 = {{ count_students_pro | safe}};
+  let values4 = Object.values(data4);
+  let labels4 = Object.keys(data4);
+
+  let data5 = {{ count_courses_pro | safe}};
+  let values5 = Object.values(data5);
+  let labels5 = Object.keys(data5);
 </script>
 
 <script src="{{ url_for( 'static', filename = 'js/dashboard.js' ) }}"></script>
