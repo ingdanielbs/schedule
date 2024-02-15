@@ -136,7 +136,10 @@ def complaints():
 
 @app.route("/upload_competences", methods=["GET", "POST"])
 @login_required
-def upload_competences():    
+def upload_competences():
+    directory = "static/course-competences"    
+    if not os.path.exists(directory):
+        os.makedirs(directory)    
     files = os.listdir("static/course-competences")
     for file in files:
         os.remove(os.path.join("static/course-competences", file))
@@ -159,6 +162,9 @@ def upload_competences():
 @app.route("/upload_students", methods=["GET", "POST"])
 @login_required
 def upload_students():    
+    directory = "static/course-students"    
+    if not os.path.exists(directory):
+        os.makedirs(directory)
     files = os.listdir("static/course-students")
     for file in files:
         os.remove(os.path.join("static/course-students", file))
