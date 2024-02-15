@@ -1,7 +1,8 @@
+import json
 import os
 from flask import Flask, flash, render_template, request, redirect, url_for, session, send_file, jsonify
 from coordination.classroom_schedule import get_horario_ambiente
-from coordination.dashboard import count_courses, count_instructors, count_not_approved_rap
+from coordination.dashboard import count_courses, count_instructors, count_instructors_contract, count_not_approved_rap, count_students_status
 from courses.competences import join_files
 from courses.complaint import committe_history, complaints_students
 from courses.courses_db import insert_course, insert_courses_students
@@ -57,7 +58,9 @@ def logout():
 @app.route("/dashboard")
 @login_required
 def dashboard():    
-    user = session["user"]              
+    user = session["user"]   
+    instructors_contract = count_instructors_contract()
+    count_students=count_students_status()   
     titular = get_fichas_titular(user['name'], trimestre_academico)            
     hours_trimestre = get_sum_horas(user['name'], trimestre_academico)
     quantity_groups = get_cant_fichas(user['name'], trimestre_academico)
@@ -67,7 +70,7 @@ def dashboard():
     quantity_instructors = count_instructors() 
     quantity_no_approved_rap = len(count_not_approved_rap())
     quantity_courses = count_courses()            
-    return render_template("instructors/dashboard.html", user=user, hours_trimestre=hours_trimestre, quantity_groups=quantity_groups, titular=titular, quantity_no_approved=quantity_no_approved, trimestre=trimestre_academico, students_not_approved=students_not_approved, apprentices_report=apprentices_report, quantity_instructors=quantity_instructors, quantity_no_approved_rap=quantity_no_approved_rap, quantity_courses=quantity_courses)
+    return render_template("instructors/dashboard.html", user=user, hours_trimestre=hours_trimestre, quantity_groups=quantity_groups, titular=titular, quantity_no_approved=quantity_no_approved, trimestre=trimestre_academico, students_not_approved=students_not_approved, apprentices_report=apprentices_report, quantity_instructors=quantity_instructors, quantity_no_approved_rap=quantity_no_approved_rap, quantity_courses=quantity_courses, instructors_contract=json.dumps(instructors_contract), count_students=json.dumps(count_students))
 
 @app.route("/schedule", methods=["GET", "POST"])
 @login_required

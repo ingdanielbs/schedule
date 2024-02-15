@@ -37,8 +37,8 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>    
+    <script src="{{ url_for( 'static', filename = 'plugins/apexchart/apexcharts.min.js' ) }}"></script>
 </head>
 
 <body>
@@ -180,7 +180,7 @@
     <!--plugins-->
     <script src="{{ url_for( 'static', filename = 'plugins/perfect-scrollbar/js/perfect-scrollbar.js' ) }}"></script>
     <script src="{{ url_for( 'static', filename = 'plugins/metismenu/metisMenu.min.js' ) }}"></script>
-    <script src="{{ url_for( 'static', filename = 'plugins/apexchart/apexcharts.min.js' ) }}"></script>
+    
     <script src="{{ url_for( 'static', filename = 'js/index.js' ) }}"></script>
     <script src="{{ url_for( 'static', filename = 'plugins/peity/jquery.peity.min.js' ) }}"></script>
 

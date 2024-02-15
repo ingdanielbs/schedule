@@ -2,6 +2,13 @@
 
 {% block content %}
 
+<!-- <style>
+  #chart {
+  max-width: 650px;
+  margin: 35px auto;
+}
+</style> -->
+
 <main class="main-wrapper">
   <div class="main-content">
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -121,7 +128,7 @@
       </div>
     </div>
     {% endif %}
-
+    {% if user.role == "INSTRUCTOR" or user.role == "INSTRUCTOR_APOYO"  %}
     <div class="row">
       <div class="col-12 col-xl-5">
         <div class="card w-100 rounded-4">
@@ -153,7 +160,7 @@
           <div class="card-body">
             <div class="d-flex align-items-start justify-content-between mb-3">
               <div class="">
-                <h5 class="mb-0 fw-bold">Aprendices pendientes para citar a comité</h5>
+                <h5 class="mb-0 fw-bold">Aprendices pendientes para reportar a comité</h5>
               </div>
             </div>
             {% for student in apprentices_report %}
@@ -172,8 +179,46 @@
           </div>
         </div>
       </div>      
-    </div><!--end row-->
+    </div>
+    {% endif %}
+    {% if user.role == "COORDINADOR" or user.role == "APOYO_COORDINADOR" or user['role'] == 'ADMINISTRADOR' %}
+    <div class="row">
+      <div class="col-12 col-xl-5">
+        <div class="card w-100 rounded-4">
+          <div class="card-body">                         
+                <h5 class="mb-0 fw-bold">Instructores por tipo de contrato</h5>
+                <div id="chart"></div>            
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-5">
+        <div class="card w-100 rounded-4">
+          <div class="card-body">                         
+                <h5 class="mb-0 fw-bold">Aprendices por estado de formación</h5>
+                <div id="chartStudent"></div>            
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
   </div>
 </main>
+
+
+<script>
+  // Obtener los datos del servidor
+  let data = {{ instructors_contract | safe}};
+  let values = Object.values(data);
+  let labels = Object.keys(data);
+
+  let data2 = {{ count_students | safe}};
+  let values2 = Object.values(data2);
+  let labels2 = Object.keys(data2);
+</script>
+
+<script src="{{ url_for( 'static', filename = 'js/dashboard.js' ) }}"></script>
+
+
 <!--end main wrapper-->
 {% endblock %}
