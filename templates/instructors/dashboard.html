@@ -2,13 +2,6 @@
 
 {% block content %}
 
-<!-- <style>
-  #chart {
-  max-width: 650px;
-  margin: 35px auto;
-}
-</style> -->
-
 <main class="main-wrapper">
   <div class="main-content">
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -233,9 +226,7 @@
   </div>
 </main>
 
-
 <script>
-  // Obtener los datos del servidor
   let data = {{ instructors_contract | safe}};
   let values = Object.values(data);
   let labels = Object.keys(data);
@@ -259,6 +250,4 @@
 
 <script src="{{ url_for( 'static', filename = 'js/dashboard.js' ) }}"></script>
 
-
-<!--end main wrapper-->
 {% endblock %}
