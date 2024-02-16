@@ -109,11 +109,12 @@ var chartGender = new ApexCharts(
 );
 chartGender.render();
 
-
+const labels4_abr = labels4.map(item => item.substring(0, 22))
 var options4 = {
   chart: {
     type: "bar",
     stacked: true,
+    height: 500,
   },
   series: [
     {
@@ -138,12 +139,17 @@ var options4 = {
   },
    
   legend: {
-    show: true,
+    show: false,
   },
   xaxis: {
-    categories: labels4,
+    categories: labels4_abr,
     labels: {
-      show: false,
+      show: true,
+      rotate: -55,
+      style: {        
+        fontSize: "8px",        
+        cssClass: "apexcharts-xaxis-label",
+      },
     },
   },
 };
