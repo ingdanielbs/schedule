@@ -14,6 +14,8 @@ colors = [
   "#2E294E",
   "#F46036",
   "#E2C044",
+  "#50CB93",
+  "#FFD369",
 ];
 var options = {
   chart: {
@@ -111,6 +113,7 @@ chartGender.render();
 var options4 = {
   chart: {
     type: "bar",
+    stacked: true,
   },
   series: [
     {
@@ -119,20 +122,29 @@ var options4 = {
     },
   ],
   colors: colors,
+  dataLabels: {
+    enabled: false,    
+  },
   plotOptions: {
     bar: {
       columnWidth: "45%",
       distributed: true,
+      dataLabels: {
+        total: {
+          enabled: true,
+        },
+      },      
     },
   },
-  dataLabels: {
-    enabled: false,
-  },
+   
   legend: {
-    show: false,
+    show: true,
   },
   xaxis: {
     categories: labels4,
+    labels: {
+      show: false,
+    },
   },
 };
 
