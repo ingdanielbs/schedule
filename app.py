@@ -71,6 +71,7 @@ def dashboard():
     students_not_approved = not_approved_students(cant_no_aprobados(str(user['document'])))        
     apprentices_report = apprentices_to_report(students_not_approved, int(user['document'])) 
     quantity_instructors = count_instructors() 
+    print(count_instructors_contract())
     quantity_no_approved_rap = len(count_not_approved_rap())
     quantity_courses = count_courses()            
     return render_template("instructors/dashboard.html", user=user, hours_trimestre=hours_trimestre, quantity_groups=quantity_groups, titular=titular, quantity_no_approved=quantity_no_approved, trimestre=trimestre_academico, students_not_approved=students_not_approved, apprentices_report=apprentices_report, quantity_instructors=quantity_instructors, quantity_no_approved_rap=quantity_no_approved_rap, quantity_courses=quantity_courses, instructors_contract=json.dumps(instructors_contract), count_students=json.dumps(count_students), count_instructors_gen=json.dumps(count_instructors_gen), count_students_pro=json.dumps(count_students_pro), count_courses_pro=json.dumps(count_courses_pro))
