@@ -26,8 +26,9 @@ def count_instructors_contract():
         users = collection.find()        
         data = list(users)
         df = pd.DataFrame(data)
-        df = df[df['contract_type'].isin(['PLANTA', 'CONTRATISTA'])]        
-        df = df[df['role'].isin(['INSTRUCTOR', 'INSTRUCTOR_APOYO'])]
+        df = df[df['contract_type'].isin(['PLANTA', 'CONTRATISTA'])]   
+        df = df[df['role'].isin(['INSTRUCTOR', 'INSTRUCTOR_APOYO'])]        
+        df = df[df['status'] == True]
         df = df['contract_type'].value_counts()
         return df.to_dict() if len(df) > 0 else None
     return None
