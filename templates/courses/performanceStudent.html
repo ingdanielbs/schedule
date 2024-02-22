@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid my-5">
+    <div class="row">
+        <div class="col-10 mx-auto">
+            <div class="card my-5 p-4 rounded-4">
+                <p class="mb-4">En este espacio puedes consultar el rendimiento académico de un aprendiz</p>               
+                <form action="" method="post">
+                    {{ csrf_token }}
+                    <div class="row">
+                        <div class="col-md-9 mb-3">
+                            <label for="documentoaprendiz" class="form-label fw-bold">Documento del aprendiz</label>
+                            <input type="text" class="form-control" name="documentoaprendiz" id="documentoaprendiz" list="documentos" aria-describedby="helpId" placeholder="Ingresa el documento del aprendiz"/>                        
+                            <datalist id="documentos">
+                                {% for student in student_list %}
+                                    <option value="{{student.numero_documento}}">{{student.nombre_completo}}</option>
+                                {% endfor %}
+                            </datalist>
+                            <small class="text-danger">{{error}}</small>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary mt-4"> Consultar </button>
+                        </div>                        
+                    </div>                    
+                </form>
+                {% if data %}
+                
+                {% endif %}                                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

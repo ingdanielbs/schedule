@@ -7,6 +7,7 @@ from courses.competences import join_files, rename_files
 from courses.complaint import committe_history, complaints_students
 from courses.courses_db import insert_course, insert_courses_competences, insert_courses_students
 from courses.horario_courses import get_schedule_course, generar_excel_course
+from courses.performance import performance_students, students_list
 from decorators.decorators import login_required
 from ingreso.login import change_status, delete_user, get_users, instructor_list, loguear, register_user, update_user
 from instructors.horario import apprentices_to_report, get_sum_horas, get_cant_fichas, get_fichas_titular, cant_no_aprobados, not_approved_students, get_horario_i, generar_excel
@@ -188,21 +189,32 @@ def page_not_found(e):
 
 @app.route("/history_complaints", methods=["GET", "POST"])
 @login_required
-def history_complaints():    
+def history_complaints():
+    student_list = students_list()    
     user = session["user"]
     if request.method == "POST":              
         documento_aprendiz = request.form["documentoaprendiz"]
         try:
             data = committe_history(int(documento_aprendiz))
         except ValueError:
-            return render_template("courses/historyComplaints.html", user=user, error='El valor ingresado debe ser un numero')
+            return render_template("courses/historyComplaints.html", user=user, error='El valor ingresado debe ser un numero', student_list=student_list)
         if data:
-            return render_template("courses/historyComplaints.html", data=data, user=user)
+            return render_template("courses/historyComplaints.html", data=data, user=user, trimestre_academico=trimestre_academico, student_list=student_list)
         else:
-            return render_template("courses/historyComplaints.html", user=user, error='No se encontraron resultados')            
+            return render_template("courses/historyComplaints.html", user=user, error='No se encontraron resultados', student_list=student_list)            
     
-    return render_template("courses/historyComplaints.html", user=user, trimestre_academico=trimestre_academico)
-    
+    return render_template("courses/historyComplaints.html", user=user, trimestre_academico=trimestre_academico, student_list=student_list)
+
+@app.route("/performance_student", methods=["GET", "POST"])
+@login_required
+def performance_student():
+    print(performance_students('1001503809'))    
+    student_list = students_list()
+    user = session["user"]
+    if request.method == "POST":              
+        documento_aprendiz = request.form["documentoaprendiz"]        
+    return render_template("courses/performanceStudent.html", user=user, trimestre_academico=trimestre_academico, student_list=student_list)
+
 @app.route("/schedule_instructors", methods=["GET", "POST"])
 @login_required
 def schedule_instructors():    
