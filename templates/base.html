@@ -91,7 +91,7 @@
                     data-bs-placement="right" title="Quejas académicas"><i
                         class="material-icons-outlined">manage_search</i></a>
                 <a class="nav-link" href="{{ url_for('history_complaints') }}" data-bs-toggle="tooltip"
-                    data-bs-placement="right" title="Historial de comité"><i
+                    data-bs-placement="right" title="Rendimiento académico aprendiz"><i
                         class="material-icons-outlined">layers</i></a>
                 {% if user['role'] == 'ADMINISTRADOR' %}
                 <a class="nav-link" href="{{ url_for('users') }}" data-bs-toggle="tooltip"
@@ -137,17 +137,14 @@
                     <a class="nav-link" href="{{ url_for('complaints') }}"><i class="
                         material-icons-outlined mx-2">manage_search</i>Quejas académicas</a>
                     <a class="nav-link" href="{{ url_for('history_complaints') }}"><i class="
-                        material-icons-outlined mx-2">layers</i>Historial de comité</a>
+                        material-icons-outlined mx-2">layers</i>Rendimiento académico aprendiz</a>
 
                     <a href="{{ url_for('logout') }}"
                         class="mt-5 list-group-item list-group-item-action d-flex align-items-center gap-2 border-bottom"><i
                             class="material-icons-outlined">power_settings_new</i>Cerrar sesión</a>
-                </ul>
-
-                
+                </ul>                
             </nav>
         </div>
-
     </div>
 
     <!--start user details offcanvas-->
@@ -167,7 +164,6 @@
                             class="material-icons-outlined">power_settings_new</i>Cerrar sesión</a>
                 </div>
             </div>
-
         </div>
         <div class="offcanvas-footer p-3 border-top">
             <div class="text-center">
@@ -176,9 +172,6 @@
             </div>
         </div>
     </div>
-    <!--end user details offcanvas-->
-
-
     {% block content %}
 
     {% endblock %}
