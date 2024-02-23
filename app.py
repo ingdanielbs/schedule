@@ -192,23 +192,28 @@ def page_not_found(e):
 def history_complaints():
     student_list = students_list()    
     user = session["user"]
+    mensaje = ''
     if request.method == "POST":              
         documento_aprendiz = request.form["documentoaprendiz"]
         try:
             data = committe_history(int(documento_aprendiz))
+            print(data)
+            performance = performance_students(str(documento_aprendiz))
         except ValueError:
             return render_template("courses/historyComplaints.html", user=user, error='El valor ingresado debe ser un numero', student_list=student_list)
-        if data:
-            return render_template("courses/historyComplaints.html", data=data, user=user, trimestre_academico=trimestre_academico, student_list=student_list)
+        if performance:
+            if len(data) == 0:
+                mensaje = 'No hay registros de comité académico para este aprendiz'
+                return render_template("courses/historyComplaints.html", data=data, user=user, trimestre_academico=trimestre_academico, student_list=student_list, performance=performance, mensaje=mensaje)
+            return render_template("courses/historyComplaints.html", data=data, user=user, trimestre_academico=trimestre_academico, student_list=student_list, performance=performance, mensaje=mensaje)
         else:
-            return render_template("courses/historyComplaints.html", user=user, error='No se encontraron resultados', student_list=student_list)            
+            return render_template("courses/historyComplaints.html", user=user, error='No se encontraron resultados', student_list=student_list, trimestre_academico=trimestre_academico)            
     
-    return render_template("courses/historyComplaints.html", user=user, trimestre_academico=trimestre_academico, student_list=student_list)
+    return render_template("courses/historyComplaints.html", user=user, trimestre_academico=trimestre_academico, student_list=student_list, performance=None, mensaje=mensaje)
 
 @app.route("/performance_student", methods=["GET", "POST"])
 @login_required
-def performance_student():
-    print(performance_students('1001503809'))    
+def performance_student():    
     student_list = students_list()
     user = session["user"]
     if request.method == "POST":              

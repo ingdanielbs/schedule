@@ -5,7 +5,7 @@
 <div class="container-fluid my-5">
     <div class="row">
         <div class="col-10 mx-auto">
-            <div class="card my-5 p-4 rounded-4">
+            <div class="card mt-5 p-4 rounded-4">
                 <p class="mb-4">En este espacio puedes consultar el rendimiento académico y el historial de un aprendiz en los comités de seguimiento académico</p>               
                 <form action="" method="post">
                     {{ csrf_token }}
@@ -23,7 +23,45 @@
                         </div>                        
                     </div>                    
                 </form>
+            </div>
+        </div>
+    </div>
+    {% if performance %}
+    <div class="row">
+        <div class="col-10 mx-auto">
+            <div class="card p-4 rounded-4">
+                <div class="d-flex">
+                    <div class=" d-flex flex-column">
+                        <span class="fw-bold">{{ performance.name_student }}</span>
+                        <span class="text-muted">{{ performance.document_type }} {{ performance.document }}</span>
+                        <span class="{% if performance.status == 'EN FORMACION' %}text-success{% elif performance.status == 'CONDICIONADO' %}text-warning{% else %}text-danger{% endif %}">{{ performance.status }}</span>                
+                        <span class="fw-bold mt-3">Rendimiento académico</span>
+                        <span class="text-white col-3  {% if performance.performance_student == 'Alto' or performance.performance_student == 'Bueno' %}bg-success{% else %}bg-danger{% endif %}">{{ performance.performance_student }}</span>
+                        <span class="fw-bold mt-3">Ficha</span>
+                        <span class="text-muted">{{ performance.course }}</span>
+                        <span class="fw-bold mt-1">Programa</span>
+                        <span class="text-muted">{{ performance.program }}</span>
+                        <span class="fw-bold mt-1">Correo electrónico</span>
+                        <span class="text-muted">{{ performance.email }}</span>
+                        <span class="fw-bold mt-1">Celular</span>
+                        <span class="text-muted">{{ performance.phone }}</span>
+                    </div>                    
+                    <div class="border border-muted border-1 mx-5"></div>
+                    <div class="col-8">
+                        <span class="fw-bold">Porcentaje de evaluación de juicios</span>
+                        <div id="chartJudge"></div>                      
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+      
+    <div class="row">
+        <div class="col-10 mx-auto">
+            <div class="card p-4 rounded-4">
                 {% if data %}
+                <h5 class="fw-bold">Historial de comité académico</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover mt-3">
                         <thead>
@@ -52,9 +90,16 @@
                         </tbody>
                     </table>
                 </div>
-                {% endif %}                                
             </div>
+            {% endif %}
+            <h5 class="text-success">{{ mensaje }}</h5>
         </div>
     </div>
 </div>
+<script>  
+    let values = [{{ performance.percentage_approved | safe }}, {{ performance.percentage_no_approved | safe }}];
+</script>
+
+<script src="{{ url_for( 'static', filename = 'js/performanceStudent.js' ) }}"></script>
+
 {% endblock %}
