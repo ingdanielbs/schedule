@@ -46,7 +46,7 @@ def login():
                 session.permanent = False           
             return redirect(url_for("dashboard"))             
         else:
-            error = 'Usuario no registrado'
+            error = 'Usuario o contraseña incorrectos'
             return render_template("instructors/index.html", error=error)              
     return render_template("instructors/index.html")
 
