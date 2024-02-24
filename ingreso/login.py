@@ -20,15 +20,17 @@ def connect():
     df = df.to_dict('records') 
     return df[0] if len(df) > 0 else None """
 
-def loguear(document):
+def loguear(document, password):
     client = connect()
     if client:
         db = client["sara"]
-        collection = db["users"]
+        collection = db["users"]      
         user = collection.find_one({"document": document})
-        client.close()
         if user:
-            return {"name": user["name"], "document": user["document"], "email": user["email"], "phone:": user["phone"], "role": user["role"], "status": user["status"], "gender": user["gender"], "contract_type": user["contract_type"]} 
+            if verificar_password(password, user["password"]):                
+                return {"name": user["name"], "document": user["document"], "email": user["email"], "phone:": user["phone"], "role": user["role"], "status": user["status"], "gender": user["gender"], "contract_type": user["contract_type"]} 
+            else:
+                return None
         else:
             return None        
     return None
@@ -117,3 +119,19 @@ def encriptar_password(password):
 
 def verificar_password(password, hashed_password):
     return bcrypt.checkpw(password.encode('utf-8'), hashed_password)
+
+def change_password(document, password, new_password):
+    client = connect()
+    if client:
+        db = client["sara"]
+        collection = db["users"]
+        user = collection.find_one({"document": document})
+        if user:
+            if not verificar_password(password, user["password"]):
+                return False
+            hashed_password = encriptar_password(password)
+            collection.update_one({"document": document}, {"$set": {"password": hashed_password}})
+            client.close()
+            return True
+    return False
+

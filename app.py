@@ -1,6 +1,6 @@
 import json
 import os
-from flask import Flask, flash, render_template, request, redirect, url_for, session, send_file, jsonify
+from flask import Flask, flash, render_template, request, redirect, url_for, session, send_file
 from coordination.classroom_schedule import get_horario_ambiente
 from coordination.dashboard import count_courses, count_courses_program, count_instructors, count_instructors_contract, count_instructors_gender, count_not_approved_rap, count_students_program, count_students_status
 from courses.competences import join_files, rename_files
@@ -18,7 +18,7 @@ from datetime import timedelta
 
 
 app = Flask(__name__)
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=15)
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/' 
 
 days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
@@ -35,8 +35,9 @@ def login():
         return redirect(url_for("dashboard"))
     if request.method == "POST":
         remember = 'remember' in request.form        
-        username = request.form["username"]        
-        user = loguear(username)             
+        username = request.form["username"]
+        password = request.form["password"]        
+        user = loguear(username, password)             
         if user and user['status']:
             session["username"] = username
             session["user"] = user
@@ -55,6 +56,15 @@ def logout():
     session.pop("username", None)
     session.pop("user", None)
     return redirect(url_for("login"))
+
+@app.route("/change_password", methods=["GET", "POST"])
+@login_required
+def change_password():
+    user = session["user"]
+    if request.method == "POST":
+        password = request.form["password"]
+        new_password = request.form["new_password"]
+    return render_template("instructors/changePassword.html", user=user)
 
 @app.route("/dashboard")
 @login_required
