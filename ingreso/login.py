@@ -65,6 +65,7 @@ def register_user(name, document, email, phone, gender, contract_type, role):
         db = client["sara"]
         collection = db["users"]
         user = collection.find_one({"document": document})
+        password = encriptar_password(document[-4:])
         if not user:
             data = {
                 "name": name.upper(), 
@@ -75,7 +76,8 @@ def register_user(name, document, email, phone, gender, contract_type, role):
                 "contract_type": contract_type,
                 "status": True,
                 "image": "NULL",
-                "role": role
+                "role": role,
+                "password": password
             }
             collection.insert_one(data)
             client.close()
@@ -119,7 +121,7 @@ def encriptar_password(password):
 def verificar_password(password, hashed_password):
     return bcrypt.checkpw(password.encode('utf-8'), hashed_password)
 
-def change_password(document, password, new_password):
+def change_password_user(document, password, new_password):
     client = connect()
     if client:
         db = client["sara"]

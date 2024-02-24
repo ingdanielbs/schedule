@@ -9,7 +9,7 @@ from courses.courses_db import insert_course, insert_courses_competences, insert
 from courses.horario_courses import get_schedule_course, generar_excel_course
 from courses.performance import performance_students, students_list
 from decorators.decorators import login_required
-from ingreso.login import change_status, delete_user, get_users, instructor_list, loguear, register_user, update_user
+from ingreso.login import change_password_user, change_status, delete_user, get_users, instructor_list, loguear, register_user, update_user
 from instructors.horario import apprentices_to_report, get_sum_horas, get_cant_fichas, get_fichas_titular, cant_no_aprobados, not_approved_students, get_horario_i, generar_excel
 
 import pandas as pd
@@ -64,7 +64,14 @@ def change_password():
     if request.method == "POST":
         password = request.form["password"]
         new_password = request.form["new_password"]
-    return render_template("instructors/changePassword.html", user=user)
+        try:
+            change_password_user(str(user.get("document")), password, new_password)
+            flash('Contraseña cambiada correctamente', 'success')
+            return redirect(url_for("change_password"))
+        except:
+            flash('Error al cambiar la contraseña', 'error')
+            return redirect(url_for("change_password"))
+    return render_template("instructors/changePassword.html", user=user, trimestre_academico=trimestre_academico)
 
 @app.route("/dashboard")
 @login_required

@@ -138,9 +138,12 @@
                         material-icons-outlined mx-2">manage_search</i>Quejas académicas</a>
                     <a class="nav-link" href="{{ url_for('history_complaints') }}"><i class="
                         material-icons-outlined mx-2">layers</i>Rendimiento académico aprendiz</a>
+                    
+                        <a class="mt-4 list-group-item list-group-item-action d-flex align-items-center gap-2" href="{{ url_for('change_password') }}"><i class="
+                            material-icons-outlined">password</i>Cambiar contraseña</a>                        
 
                     <a href="{{ url_for('logout') }}"
-                        class="mt-5 list-group-item list-group-item-action d-flex align-items-center gap-2 border-bottom"><i
+                        class="mt-2 list-group-item list-group-item-action d-flex align-items-center gap-2 border-bottom"><i
                             class="material-icons-outlined">power_settings_new</i>Cerrar sesión</a>
                 </ul>                
             </nav>
