@@ -108,8 +108,7 @@ def delete_user(id):
 
 def instructor_list():
     instructors = get_users()    
-    instructors = [instructor for instructor in instructors if instructor["role"] in ["INSTRUCTOR", "INSTRUCTOR_APOYO"] ]
-    """ ordenar por name """       
+    instructors = [instructor for instructor in instructors if instructor["role"] in ["INSTRUCTOR", "INSTRUCTOR_APOYO"] ]     
     instructors = sorted(instructors, key=lambda x: x["name"])
     return instructors
 
@@ -129,7 +128,7 @@ def change_password(document, password, new_password):
         if user:
             if not verificar_password(password, user["password"]):
                 return False
-            hashed_password = encriptar_password(password)
+            hashed_password = encriptar_password(new_password)
             collection.update_one({"document": document}, {"$set": {"password": hashed_password}})
             client.close()
             return True
