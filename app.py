@@ -16,7 +16,6 @@ import pandas as pd
 
 from datetime import timedelta
 
-
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/' 
