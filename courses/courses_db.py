@@ -52,32 +52,35 @@ def insert_courses_students(archivo):
                 return False
     return False
 
-def insert_courses_competences(archivo):
+
+def insert_courses_competences():
     client = connect()
     with open('static/competencias.json', 'r', encoding='utf-8') as archivo_json:    
         data = json.load(archivo_json)
         df = pd.DataFrame(data)
+        print(df)
         
         if client:
             db = client["sara"]
             collection = db["courses_competences"]            
-            collection.delete_many({})
+            collection.delete_many({})            
+            
             for index, row in df.iterrows():
                 data = {
-                    "numero_documento": row['numero_documento'],
-                    "nombre": row['nombre'],
-                    "apellidos": row['apellidos'],
-                    "programa": row['programa'],
-                    "ficha": row['ficha'],
+                    "document_type": row['tipo_documento'],
+                    "document": row['numero_documento'],
+                    "name": row['nombre'],
+                    "last_name": row['apellidos'],
+                    "status": row['estado'],
+                    "competence": row['competencia'],
                     "rap": row['rap'],
-                    "juicio": row['juicio'],
-                    "estado": row['estado']
+                    "judgment": row['juicio'],
+                    "official": row['funcionario'],
+                    "course_number": row['ficha'],
+                    "program": row['programa']
                 }
-                try:
-                    collection.insert_one(data)
-                    return True
-                except:
-                    return False
+                collection.insert_one(data)
+            return True
     return False
 
         
