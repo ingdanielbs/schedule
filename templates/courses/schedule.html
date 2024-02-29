@@ -23,9 +23,10 @@
                 <div class="table-responsive mt-4">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>   
-                            <a class="mb-3" href="{{ url_for('schedule_course_down') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Descargar horario">
-                                <!-- <span class="tooltip-text">Descargar horario</span> -->
-                                <img src="{{ url_for( 'static', filename = 'images/export-excel-35.png' ) }}" alt=""></a>                        
+                            <a class="mb-3" href="{{ url_for('schedule_course_down') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Descargar horario">                                
+                                <img src="{{ url_for( 'static', filename = 'images/export-excel-35.png' ) }}" alt=""></a>
+                            <a class="mb-3 mx-2" href="{{ url_for('students_course_down') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Descargar lista de aprendices">
+                                <img src="{{ url_for( 'static', filename = 'images/export-list-35.png' ) }}" alt=""></a>                        
                                 <a type="button" class="mb-3 mx-2 custom-tooltip" title="Detalle RAPS" data-bs-toggle="tooltip" data-bs-placement="right">                                
                                     <img src="{{ url_for( 'static', filename = 'images/rap1-icon-35.png' ) }}" alt="" data-bs-toggle="modal" data-bs-target="#modalRaps" > </a>
                         </div>
