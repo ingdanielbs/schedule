@@ -155,7 +155,6 @@ def generate_excel_students(course_number):
 
 def courses_delivery(course_number):
     doc = Document(f"static/course_delivery/Formato_Acta_Entrega_Ficha.docx")
-
     course = course_number    
     locale.setlocale(locale.LC_ALL, 'es_ES.utf8')
     date_now = datetime.now().strftime('%d de %B de %Y')
@@ -181,9 +180,9 @@ def courses_delivery(course_number):
                         if "[FECHA]" in run.text:
                             run.text = run.text.replace("[FECHA]", date_now)
                         if "[PROGRAMA]" in run.text:
-                            run.text = run.text.replace("[PROGRAMA]", program)                        
-                        if "[TABLA_APRENDICES]" in cell.text:
-                            cell.text = cell.text.replace("[TABLA_APRENDICES]", "")
+                            run.text = run.text.replace("[PROGRAMA]", program)                                                   
+                        if "[TABLA_APRENDICES]" in run.text:
+                            run.text = run.text.replace("[TABLA_APRENDICES]", "")                                                   
                             table = cell.add_table(rows=1, cols=5)
                             table.style = 'Table Grid'
                             hdr_cells = table.rows[0].cells
@@ -199,6 +198,5 @@ def courses_delivery(course_number):
                                 row_cells[2].text = str(row['nombre'])
                                 row_cells[3].text = str(row['apellidos'])
                                 row_cells[4].text = str(row['estado'])
-
 
     doc.save(f"static/course_delivery/Acta_Entrega_Ficha_{course}.docx")
