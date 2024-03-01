@@ -142,8 +142,18 @@ def course_schedule():
 def schedule_course_down():    
     ficha = session['ficha_down']
     generar_excel_course(get_schedule_course(ficha, trimestre_academico), f"Horario {trimestre_academico} - {ficha}.xlsx")
-    courses_delivery(ficha)
     file_path = f"static/schedule-courses/Horario {trimestre_academico} - {ficha}.xlsx"        
+    if os.path.exists(file_path):                 
+        return send_file(file_path, as_attachment=True)
+    else:
+        return redirect(url_for("course_schedule"))
+    
+@app.route("/courses_delivery_down")
+@login_required
+def courses_delivery_down():    
+    ficha = session['ficha_down']    
+    courses_delivery(ficha)
+    file_path = f"static/course_delivery/Acta_Entrega_Ficha_{ficha}.docx"        
     if os.path.exists(file_path):                 
         return send_file(file_path, as_attachment=True)
     else:
