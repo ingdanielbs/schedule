@@ -74,8 +74,7 @@ def change_password():
 
 @app.route("/dashboard")
 @login_required
-def dashboard():    
-    generate_excel_students(2771132)
+def dashboard():
     user = session["user"]   
     instructors_contract = count_instructors_contract()
     count_students=count_students_status()  
@@ -144,6 +143,17 @@ def schedule_course_down():
     ficha = session['ficha_down']
     generar_excel_course(get_schedule_course(ficha, trimestre_academico), f"Horario {trimestre_academico} - {ficha}.xlsx")
     file_path = f"static/schedule-courses/Horario {trimestre_academico} - {ficha}.xlsx"        
+    if os.path.exists(file_path):                 
+        return send_file(file_path, as_attachment=True)
+    else:
+        return redirect(url_for("course_schedule"))
+    
+@app.route("/students_course_down")
+@login_required
+def students_course_down():    
+    ficha = session['ficha_down']
+    generate_excel_students(int(ficha))
+    file_path = f"static/course-students-excel/{ficha}.xlsx"        
     if os.path.exists(file_path):                 
         return send_file(file_path, as_attachment=True)
     else:

@@ -96,7 +96,7 @@ def generate_excel_students(course_number):
         collection_courses = db["courses"]
         students = collection.find({"course_number": course_number})
         course = collection_courses.find_one({"course_number": course_number})
-        students = [student for student in students if student['state'] != 'RETIRO VOLUNTARIO' and student['state'] != 'CANCELADO']
+        students = [student for student in students if student['state'] != 'RETIRO VOLUNTARIO' and student['state'] != 'CANCELADO' and student['state'] != 'TRASLADADO']
         students = sorted(students, key=lambda x: x['name'])
         data = []
         for student in students:
