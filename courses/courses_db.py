@@ -6,6 +6,8 @@ from openpyxl.drawing.image import Image
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.styles import Alignment, PatternFill, Border, Side
 from docx import Document
+from datetime import datetime
+import locale
 
 def insert_course(archivo):    
     client = connect()
@@ -63,7 +65,6 @@ def insert_courses_competences():
     with open('static/competencias.json', 'r', encoding='utf-8') as archivo_json:    
         data = json.load(archivo_json)
         df = pd.DataFrame(data)
-        print(df)
         
         if client:
             db = client["sara"]
@@ -152,11 +153,23 @@ def generate_excel_students(course_number):
 
 
 
-def entrega_grupo(course_number):
-    # Cargar el documento de plantilla
-    doc = Document("Formato_Acta_Entrega_Ficha.docx")
+def courses_delivery(course_number):
+    doc = Document(f"static/course_delivery/Formato_Acta_Entrega_Ficha.docx")
 
-    ficha = course_number
+    course = course_number    
+    locale.setlocale(locale.LC_ALL, 'es_ES.utf8')
+    date_now = datetime.now().strftime('%d de %B de %Y')
+    with open('static/competencias.json', 'r', encoding='utf-8') as archivo_json:    
+        data = json.load(archivo_json)
+        df = pd.DataFrame(data)
+        df = df[df['ficha'] == int(course)]
+        program = df.iloc[0, 10]
+
+        df = df[(df['estado'] != 'CANCELADO') & (df['estado'] != 'RETIRO VOLUNTARIO') & (df['estado'] != 'TRASLADADO')]
+
+        df = df.groupby(['tipo_documento', 'numero_documento', 'nombre', 'apellidos', 'juicio', 'estado']).size().reset_index(name='cantidad')
+        students = df[(df['juicio'] == 'POR EVALUAR') & (df['cantidad'] == 1)]
+        
    
     for table in doc.tables:
         for row in table.rows:
@@ -164,7 +177,28 @@ def entrega_grupo(course_number):
                 for paragraph in cell.paragraphs:
                     for run in paragraph.runs:
                         if "[FICHA]" in run.text:
-                            run.text = run.text.replace("[FICHA]", ficha)
+                            run.text = run.text.replace("[FICHA]", course)
+                        if "[FECHA]" in run.text:
+                            run.text = run.text.replace("[FECHA]", date_now)
+                        if "[PROGRAMA]" in run.text:
+                            run.text = run.text.replace("[PROGRAMA]", program)                        
+                        if "[TABLA_APRENDICES]" in cell.text:
+                            cell.text = cell.text.replace("[TABLA_APRENDICES]", "")
+                            table = cell.add_table(rows=1, cols=5)
+                            table.style = 'Table Grid'
+                            hdr_cells = table.rows[0].cells
+                            hdr_cells[0].text = 'Tipo documento'
+                            hdr_cells[1].text = 'Documento'
+                            hdr_cells[2].text = 'Nombre'
+                            hdr_cells[3].text = 'Apellidos'
+                            hdr_cells[4].text = 'Estado'
+                            for index, row in students.iterrows():
+                                row_cells = table.add_row().cells
+                                row_cells[0].text = str(row['tipo_documento'])
+                                row_cells[1].text = str(row['numero_documento'])
+                                row_cells[2].text = str(row['nombre'])
+                                row_cells[3].text = str(row['apellidos'])
+                                row_cells[4].text = str(row['estado'])
 
-    # Guardar el documento con la lista insertada
-    doc.save(f"Acta_Entrega_Ficha_{ficha}.docx")
+
+    doc.save(f"static/course_delivery/Acta_Entrega_Ficha_{course}.docx")
