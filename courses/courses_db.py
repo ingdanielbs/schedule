@@ -5,6 +5,7 @@ from openpyxl import Workbook
 from openpyxl.drawing.image import Image
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.styles import Alignment, PatternFill, Border, Side
+from docx import Document
 
 def insert_course(archivo):    
     client = connect()
@@ -148,3 +149,22 @@ def generate_excel_students(course_number):
         
         
         workbook.save(f'static/course-students-excel/{course_number}.xlsx')
+
+
+
+def entrega_grupo(course_number):
+    # Cargar el documento de plantilla
+    doc = Document("Formato_Acta_Entrega_Ficha.docx")
+
+    ficha = course_number
+   
+    for table in doc.tables:
+        for row in table.rows:
+            for cell in row.cells:
+                for paragraph in cell.paragraphs:
+                    for run in paragraph.runs:
+                        if "[FICHA]" in run.text:
+                            run.text = run.text.replace("[FICHA]", ficha)
+
+    # Guardar el documento con la lista insertada
+    doc.save(f"Acta_Entrega_Ficha_{ficha}.docx")
