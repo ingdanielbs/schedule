@@ -151,8 +151,9 @@ def schedule_course_down():
 @app.route("/courses_delivery_down")
 @login_required
 def courses_delivery_down():    
+    user = session["user"]
     ficha = session['ficha_down']    
-    courses_delivery(ficha)
+    courses_delivery(ficha, user['name'])
     file_path = f"static/course_delivery/Acta_Entrega_Ficha_{ficha}.docx"        
     if os.path.exists(file_path):                 
         return send_file(file_path, as_attachment=True)
