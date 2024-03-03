@@ -5,7 +5,7 @@ from coordination.classroom_schedule import get_horario_ambiente
 from coordination.dashboard import count_courses, count_courses_program, count_instructors, count_instructors_contract, count_instructors_gender, count_not_approved_rap, count_students_program, count_students_status
 from courses.competences import join_files, rename_files
 from courses.complaint import committe_history, complaints_students
-from courses.courses_db import generate_excel_students, insert_course, insert_courses_competences, insert_courses_students
+from courses.courses_db import courses_delivery, generate_excel_students, insert_course, insert_courses_competences, insert_courses_students
 from courses.horario_courses import get_schedule_course, generar_excel_course
 from courses.performance import performance_students, students_list
 from decorators.decorators import login_required
@@ -143,6 +143,18 @@ def schedule_course_down():
     ficha = session['ficha_down']
     generar_excel_course(get_schedule_course(ficha, trimestre_academico), f"Horario {trimestre_academico} - {ficha}.xlsx")
     file_path = f"static/schedule-courses/Horario {trimestre_academico} - {ficha}.xlsx"        
+    if os.path.exists(file_path):                 
+        return send_file(file_path, as_attachment=True)
+    else:
+        return redirect(url_for("course_schedule"))
+    
+@app.route("/courses_delivery_down")
+@login_required
+def courses_delivery_down():    
+    user = session["user"]
+    ficha = session['ficha_down']    
+    courses_delivery(ficha, user['name'])
+    file_path = f"static/course_delivery/Acta_Entrega_Ficha_{ficha}.docx"        
     if os.path.exists(file_path):                 
         return send_file(file_path, as_attachment=True)
     else:

@@ -5,6 +5,9 @@ from openpyxl import Workbook
 from openpyxl.drawing.image import Image
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.styles import Alignment, PatternFill, Border, Side
+from docx import Document
+from datetime import datetime
+import locale
 
 def insert_course(archivo):    
     client = connect()
@@ -62,7 +65,6 @@ def insert_courses_competences():
     with open('static/competencias.json', 'r', encoding='utf-8') as archivo_json:    
         data = json.load(archivo_json)
         df = pd.DataFrame(data)
-        print(df)
         
         if client:
             db = client["sara"]
@@ -95,7 +97,7 @@ def generate_excel_students(course_number):
         collection_courses = db["courses"]
         students = collection.find({"course_number": course_number})
         course = collection_courses.find_one({"course_number": course_number})
-        students = [student for student in students if student['state'] != 'RETIRO VOLUNTARIO' and student['state'] != 'CANCELADO']
+        students = [student for student in students if student['state'] != 'RETIRO VOLUNTARIO' and student['state'] != 'CANCELADO' and student['state'] != 'TRASLADADO']
         students = sorted(students, key=lambda x: x['name'])
         data = []
         for student in students:
@@ -148,3 +150,104 @@ def generate_excel_students(course_number):
         
         
         workbook.save(f'static/course-students-excel/{course_number}.xlsx')
+
+
+
+def courses_delivery(course_number, instructor_name):
+    doc = Document(f"static/course_delivery/Formato_Acta_Entrega_Ficha.docx")
+    course = course_number    
+    locale.setlocale(locale.LC_ALL, 'es_ES.utf8')
+    date_now = datetime.now().strftime('%d de %B de %Y')
+    with open('static/competencias.json', 'r', encoding='utf-8') as archivo_json:    
+        data = json.load(archivo_json)
+        df = pd.DataFrame(data)
+        df = df[df['ficha'] == int(course)]
+        program = df.iloc[0, 10]
+
+        df = df[(df['estado'] != 'CANCELADO') & (df['estado'] != 'RETIRO VOLUNTARIO') & (df['estado'] != 'TRASLADADO')]
+
+        df = df.groupby(['tipo_documento', 'numero_documento', 'nombre', 'apellidos', 'juicio', 'estado']).size().reset_index(name='cantidad')
+        df2 = df.drop_duplicates(subset='numero_documento')
+        amount_status = df2.groupby(['estado']).size().reset_index(name='cantidad')
+        students = df[(df['juicio'] == 'POR EVALUAR') & (df['cantidad'] == 1)]
+        untested_students = df[(df['juicio'] == 'POR EVALUAR') & (df['cantidad'] > 1)]     
+        not_approved_students = df[(df['juicio'] == 'NO APROBADO')]
+        unproductive_students = pd.concat([untested_students, not_approved_students]).drop_duplicates(subset='numero_documento')   
+   
+    for table in doc.tables:
+        for row in table.rows:
+            for cell in row.cells:
+                for paragraph in cell.paragraphs:
+                    for run in paragraph.runs:
+                        if "[FICHA]" in run.text:
+                            run.text = run.text.replace("[FICHA]", course)
+                        if "[FECHA]" in run.text:
+                            run.text = run.text.replace("[FECHA]", date_now)
+                        if "[PROGRAMA]" in run.text:
+                            run.text = run.text.replace("[PROGRAMA]", program)     
+                        if "[NOMBRE_INSTRUCTOR]" in run.text:
+                            run.text = run.text.replace("[NOMBRE_INSTRUCTOR]", instructor_name)
+                        if "[TABLA_CANTIDAD]" in run.text:
+                            run.text = run.text.replace("[TABLA_CANTIDAD]", "")
+                            table = cell.add_table(rows=1, cols=2)
+                            table.style = 'Table Grid'
+                            hdr_cells = table.rows[0].cells
+                            hdr_cells[0].text = 'Estado'
+                            hdr_cells[0].paragraphs[0].runs[0].bold = True
+                            hdr_cells[1].text = 'Cantidad'
+                            hdr_cells[1].paragraphs[0].runs[0].bold = True
+                            for index, row in amount_status.iterrows():
+                                row_cells = table.add_row().cells
+                                row_cells[0].text = str(row['estado'])
+                                row_cells[1].text = str(row['cantidad'])
+                            if students.empty:
+                                cell.add_paragraph("No hay aprendices para iniciar su etapa productiva.")
+                            else:
+                                cell.add_paragraph("Los siguientes aprendices se encuentran aprobados para inciar la etapa productiva:")
+                                table = cell.add_table(rows=1, cols=4)
+                                table.style = 'Table Grid'
+                                hdr_cells = table.rows[0].cells
+                                hdr_cells[0].text = 'Tipo documento'
+                                hdr_cells[0].paragraphs[0].runs[0].bold = True
+                                hdr_cells[1].text = 'Documento'
+                                hdr_cells[1].paragraphs[0].runs[0].bold = True
+                                hdr_cells[2].text = 'Nombre'
+                                hdr_cells[2].paragraphs[0].runs[0].bold = True
+                                hdr_cells[3].text = 'Estado'
+                                hdr_cells[3].paragraphs[0].runs[0].bold = True
+                                for index, row in students.iterrows():
+                                    row_cells = table.add_row().cells
+                                    row_cells[0].text = str(row['tipo_documento'])
+                                    row_cells[1].text = str(row['numero_documento'])
+                                    row_cells[2].text = str(row['nombre']) + ' ' + str(row['apellidos'])
+                                    row_cells[3].text = str(row['estado'])           
+                            if unproductive_students.empty:
+                                run = cell.add_paragraph().add_run("\nObservaciones")
+                                run.bold = True
+                                cell.add_paragraph("No hay aprendices con observaciones.")
+                            else:
+                                run = cell.add_paragraph().add_run("\nObservaciones")
+                                run.bold = True
+                                cell.add_paragraph("Los siguientes aprendices NO pueden inciar su etapa productiva debido a que tienen resultados pendientes por evaluar o No aprobados:")
+                                table = cell.add_table(rows=1, cols=4)
+                                table.style = 'Table Grid'
+                                hdr_cells = table.rows[0].cells
+                                hdr_cells[0].text = 'Tipo documento'
+                                hdr_cells[0].paragraphs[0].runs[0].bold = True
+                                hdr_cells[1].text = 'Documento'
+                                hdr_cells[1].paragraphs[0].runs[0].bold = True
+                                hdr_cells[2].text = 'Nombre'
+                                hdr_cells[2].paragraphs[0].runs[0].bold = True
+                                hdr_cells[3].text = 'Estado'
+                                hdr_cells[3].paragraphs[0].runs[0].bold = True
+                                for index, row in unproductive_students.iterrows():
+                                    row_cells = table.add_row().cells
+                                    row_cells[0].text = str(row['tipo_documento'])
+                                    row_cells[1].text = str(row['numero_documento'])
+                                    row_cells[2].text = str(row['nombre']) + ' ' + str(row['apellidos'])
+                                    row_cells[3].text = str(row['estado'])
+                                cell.add_paragraph("\n")
+                             
+                        
+
+    doc.save(f"static/course_delivery/Acta_Entrega_Ficha_{course}.docx")
