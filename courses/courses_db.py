@@ -8,6 +8,7 @@ from openpyxl.styles import Alignment, PatternFill, Border, Side
 from docx import Document
 from datetime import datetime
 import locale
+import calendar
 
 def insert_course(archivo):    
     client = connect()
@@ -157,10 +158,10 @@ def courses_delivery(course_number, instructor_name):
     doc = Document(f"static/course_delivery/Formato_Acta_Entrega_Ficha.docx")
     course = course_number    
     try:
-        locale.setlocale(locale.LC_ALL, 'C.UTF-8')
+        locale.setlocale(locale.LC_ALL, 'es_ES.utf8')
     except locale.Error as e:
-        print(f"Error al establecer la configuración regional: {e}.")
-    date_now = datetime.now().strftime('%d de %B de %Y')
+        print(f"Error al establecer la configuración regional: {e}. Se utilizará la configuración regional predeterminada.")
+    date_now = datetime.now().strftime('%d de {mes} de %Y').format(mes=calendar.month_name[int(datetime.now().strftime('%m'))])
     with open('static/competencias.json', 'r', encoding='utf-8') as archivo_json:    
         data = json.load(archivo_json)
         df = pd.DataFrame(data)
