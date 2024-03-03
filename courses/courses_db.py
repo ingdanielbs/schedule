@@ -156,7 +156,10 @@ def generate_excel_students(course_number):
 def courses_delivery(course_number, instructor_name):
     doc = Document(f"static/course_delivery/Formato_Acta_Entrega_Ficha.docx")
     course = course_number    
-    locale.setlocale(locale.LC_ALL, 'es_ES.utf8')
+    try:
+        locale.setlocale(locale.LC_ALL, 'C.UTF-8')
+    except locale.Error as e:
+        print(f"Error al establecer la configuración regional: {e}.")
     date_now = datetime.now().strftime('%d de %B de %Y')
     with open('static/competencias.json', 'r', encoding='utf-8') as archivo_json:    
         data = json.load(archivo_json)
