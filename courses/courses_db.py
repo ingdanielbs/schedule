@@ -10,6 +10,8 @@ from datetime import datetime
 import locale
 import calendar
 
+meses = {1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril', 5: 'Mayo', 6: 'Junio', 7: 'Julio', 8: 'Agosto', 9: 'Septiembre', 10: 'Octubre', 11: 'Noviembre', 12: 'Diciembre'}
+
 def insert_course(archivo):    
     client = connect()
     df = pd.read_excel(f'static/course-students/{archivo}')
@@ -157,11 +159,9 @@ def generate_excel_students(course_number):
 def courses_delivery(course_number, instructor_name):
     doc = Document(f"static/course_delivery/Formato_Acta_Entrega_Ficha.docx")
     course = course_number    
-    try:
-        locale.setlocale(locale.LC_ALL, 'es_ES.utf8')
-    except locale.Error as e:
-        print(f"Error al establecer la configuración regional: {e}. Se utilizará la configuración regional predeterminada.")
-    date_now = datetime.now().strftime('%d de {mes} de %Y').format(mes=calendar.month_name[int(datetime.now().strftime('%m'))])
+    mes_actual = datetime.now().month
+    nombre_mes = meses.get(mes_actual)
+    date_now = datetime.now().strftime(f'%d de {nombre_mes} de %Y')
     with open('static/competencias.json', 'r', encoding='utf-8') as archivo_json:    
         data = json.load(archivo_json)
         df = pd.DataFrame(data)
