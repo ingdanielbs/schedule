@@ -97,7 +97,7 @@
     </div>
 </div>
 <script>  
-    let values = [{{ performance.percentage_approved | safe }}, {{ performance.percentage_no_approved | safe }}];
+    let values = [{{ performance.total_approved | safe}}, {{ performance.percentage_approved | safe }}, {{ performance.total_no_approved | safe}} ,{{ performance.percentage_no_approved | safe }}];
 </script>
 
 <script src="{{ url_for( 'static', filename = 'js/performanceStudent.js' ) }}"></script>

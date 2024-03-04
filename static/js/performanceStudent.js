@@ -1,8 +1,8 @@
 colors = [
   "#00E396",
+  "#00E396",
   "#ff0000",
-  "#FEB019",
-  "#FF4560",
+  "#ff0000",
   "#775DD0",
   "#3F51B5",
   "#546E7A",
@@ -26,7 +26,7 @@ var options = {
     },
     series: [
       {
-        name: "Porcentaje",
+        name: "Valor",
         data: values
       },
     ],
@@ -38,13 +38,13 @@ var options = {
       },
     },
     dataLabels: {
-      enabled: false,
+      enabled: true,
     },
     legend: {
       show: false,
     },
     xaxis: {
-      categories: ["APROBADO", "NO APROBADO"],
+      categories: ["CANTIDAD APROBADO", " % APROBADO", "CANTIDAD NO APROBADO", "% NO APROBADO", ],
     },
   };
 

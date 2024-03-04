@@ -66,8 +66,7 @@ def performance_courses(course_number):
     with open('static/competencias.json', 'r', encoding='utf-8') as archivo_json:
         data = json.load(archivo_json)
         df = pd.DataFrame(data)
-        df = df[df['ficha'] == course_number]
-        """ Contar juicios """        
+        df = df[df['ficha'] == course_number]    
         
         
         
