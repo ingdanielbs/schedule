@@ -7,8 +7,6 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.styles import Alignment, PatternFill, Border, Side
 from docx import Document
 from datetime import datetime
-import locale
-import calendar
 
 meses = {1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril', 5: 'Mayo', 6: 'Junio', 7: 'Julio', 8: 'Agosto', 9: 'Septiembre', 10: 'Octubre', 11: 'Noviembre', 12: 'Diciembre'}
 
@@ -61,7 +59,6 @@ def insert_courses_students(archivo):
             except:
                 return False
     return False
-
 
 def insert_courses_competences():
     client = connect()
@@ -149,12 +146,8 @@ def generate_excel_students(course_number):
         hoja.column_dimensions['F'].width = 14
 
         for r in dataframe_to_rows(df, index=False, header=False):
-            hoja.append(r)       
-        
-        
+            hoja.append(r)
         workbook.save(f'static/course-students-excel/{course_number}.xlsx')
-
-
 
 def courses_delivery(course_number, instructor_name):
     doc = Document(f"static/course_delivery/Formato_Acta_Entrega_Ficha.docx")
@@ -250,8 +243,37 @@ def courses_delivery(course_number, instructor_name):
                                     row_cells[1].text = str(row['numero_documento'])
                                     row_cells[2].text = str(row['nombre']) + ' ' + str(row['apellidos'])
                                     row_cells[3].text = str(row['estado'])
-                                cell.add_paragraph("\n")
-                             
-                        
-
+                                cell.add_paragraph("\n")  
     doc.save(f"static/course_delivery/Acta_Entrega_Ficha_{course}.docx")
+
+def course_count_students_status(course_number):
+    with open('static/competencias.json', 'r', encoding='utf-8') as archivo_json:
+        data = json.load(archivo_json)
+        df = pd.DataFrame(data)
+        df = df[df['ficha'] == int(course_number)]
+        df = df.drop_duplicates(subset='numero_documento', keep='first')
+        df = df['estado'].value_counts()
+        return df.to_dict() if len(data) > 0 else None
+    return None
+
+def course_count_rap_students(course_number):
+    with open('static/competencias.json', 'r', encoding='utf-8') as archivo_json:
+        data = json.load(archivo_json)
+        df = pd.DataFrame(data)
+        df = df[df['ficha'] == int(course_number)]
+        df2 = df
+        df2 = df2.drop_duplicates(subset='rap', keep='first')
+        count_rap = df2['rap'].value_counts()
+        length = len(count_rap)
+        df = df[~df['estado'].isin(['APLAZADO', 'CANCELADO', 'RETIRO VOLUNTARIO', 'TRASLADADO'])]
+        df['approved'] = df['juicio'] == 'APROBADO'
+        approved_counts = df.groupby('numero_documento')['approved'].sum()
+        students = {}
+        df['full_name'] = df['nombre'] + ' ' + df['apellidos']
+        student_names = df.set_index('numero_documento')['full_name'].to_dict()
+        for student in approved_counts.index:
+            percentage = round((approved_counts[student] * 100) / length, 2)
+            students[student_names[student]] = percentage
+        students = dict(sorted(students.items()))
+        return students if len(data) > 0 else None
+    return None
