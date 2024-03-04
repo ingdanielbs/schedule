@@ -1,7 +1,7 @@
 colors = [
   "#00E396",
-  "#00E396",
   "#ff0000",
+  "#00E396",
   "#ff0000",
   "#775DD0",
   "#3F51B5",
@@ -18,7 +18,7 @@ colors = [
   "#FFD369",
 ];
 
-
+var additionalValues = [percentageAproved, percentageNoAproved];
 var options = {
     chart: {
       type: "bar",
@@ -39,12 +39,15 @@ var options = {
     },
     dataLabels: {
       enabled: true,
+      formatter: function (val, opts) {
+        return val + ' (' + additionalValues[opts.dataPointIndex] + '%'+ ')'; 
+      },
     },
     legend: {
-      show: false,
+      show: false,      
     },
     xaxis: {
-      categories: ["CANTIDAD APROBADO", " % APROBADO", "CANTIDAD NO APROBADO", "% NO APROBADO", ],
+      categories: ["CANTIDAD APROBADO", "CANTIDAD NO APROBADO"],
     },
   };
 

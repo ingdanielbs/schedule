@@ -38,6 +38,7 @@ def performance_students(numero_documento):
             "document": df['numero_documento'].iloc[0],
             "status": df['estado'].iloc[0],
             "program": df['programa'].iloc[0],
+            "total": len(total),
             "total_approved": total_approved,
             "total_no_approved": total_no_approved,
             "percentage_approved": int(percentage_approved),
