@@ -5,7 +5,7 @@ from coordination.classroom_schedule import get_horario_ambiente
 from coordination.dashboard import count_courses, count_courses_program, count_instructors, count_instructors_contract, count_instructors_gender, count_not_approved_rap, count_students_program, count_students_status
 from courses.competences import join_files, rename_files
 from courses.complaint import committe_history, complaints_students
-from courses.courses_db import courses_delivery, generate_excel_students, insert_course, insert_courses_competences, insert_courses_students
+from courses.courses_db import course_count_rap_students, course_count_students_status, courses_delivery, generate_excel_students, insert_course, insert_courses_competences, insert_courses_students
 from courses.horario_courses import get_schedule_course, generar_excel_course
 from courses.performance import performance_students, students_list
 from decorators.decorators import login_required
@@ -126,9 +126,11 @@ def course_schedule():
         ficha = request.form["ficha"].strip()
         session['ficha_down'] = ficha
         if ficha:
+            count_students_status = course_count_students_status(ficha)
+            count_rap_students = course_count_rap_students(ficha)
             try:
                 schedule_course = get_schedule_course(ficha, trimestre_academico)              
-                return render_template('courses/schedule.html', user=user, schedule_course=schedule_course, days=days, hours_combined=hours_combined, code_course= ficha, trimestre=trimestre_academico)     
+                return render_template('courses/schedule.html', user=user, schedule_course=schedule_course, days=days, hours_combined=hours_combined, code_course= ficha, trimestre=trimestre_academico, count_students_status=count_students_status, count_rap_students=count_rap_students)     
             except:
                 error = 'Ficha no encontrada'
                 return render_template('courses/schedule.html', error=error, user=user, trimestre=trimestre_academico)

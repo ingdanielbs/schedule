@@ -115,14 +115,17 @@
 <div class="modal fade" id="modalPerformance" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header d-flex flex-column">
                 <h5 class="modal-title" id="modalTitleId">
-                    Rendimiento académico de los aprendices
+                    Rendimiento académico de la ficha
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                
+                <h6 class="mx-4">Cantidad de aprendices por estado de foramación</h6>
+                <div class="px-4 col-10" id="chartStatus" style="height: 330px;"></div>
+                <h6 class="mx-4 mt-4">Porcentaje de resultados aprobados por aprendiz</h6>
+                <div class="px-4 col-10" id="chartPercentage"></div>                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>                
@@ -131,5 +134,16 @@
     </div>
 </div>
 {% endif %}
+
+<script>
+    let data = {{ count_students_status | safe}};
+    let values = Object.values(data);
+    let labels = Object.keys(data);
+    let data2 = {{count_rap_students | safe}};
+    let values2 = Object.values(data2);
+    let labels2 = Object.keys(data2);
+</script>
+<script src="{{ url_for( 'static', filename = 'js/performanceCourse.js' ) }}"></script>
+
 
 {% endblock %}
