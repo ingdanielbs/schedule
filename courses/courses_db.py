@@ -60,7 +60,7 @@ def insert_courses_students(archivo):
                 return False
     return False
 
-def insert_courses_competences():
+""" def insert_courses_competences():
     client = connect()
     with open('static/competencias.json', 'r', encoding='utf-8') as archivo_json:    
         data = json.load(archivo_json)
@@ -87,7 +87,25 @@ def insert_courses_competences():
                 }
                 collection.insert_one(data)
             return True
+    return False """
+
+def insert_courses_competences():
+    client = connect()
+    with open('static/competencias.json', 'r', encoding='utf-8') as archivo_json:    
+        data = json.load(archivo_json)        
+        
+        if client:
+            db = client["sara"]
+            collection = db["courses_competences"]            
+            collection.delete_many({})            
+            try:
+                collection.insert_many(data)
+                return True
+            except Exception as e:
+                print(f"Error during bulk insert: {e}")
+                return False
     return False
+
 
 def generate_excel_students(course_number):    
     client = connect()
