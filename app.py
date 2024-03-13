@@ -1,6 +1,7 @@
 import json
 import os
 from flask import Flask, flash, render_template, request, redirect, url_for, session, send_file
+from coordination.asistence import courses_instructors
 from coordination.classroom_schedule import get_horario_ambiente
 from coordination.dashboard import count_courses, count_courses_program, count_instructors, count_instructors_contract, count_instructors_gender, count_not_approved_rap, count_students_program, count_students_status
 from courses.competences import join_files, rename_files
@@ -357,6 +358,11 @@ def users_delete(id):
     else:
         flash('Error al eliminar el usuario', 'error')        
         return redirect(url_for("users"))    
+    
+@app.route("/asistance")
+def asistance():
+    return courses_instructors()
+
    
 
 if __name__ == '__main__':
