@@ -27,8 +27,6 @@ def courses_instructors():
     
     """ Agrupar por instructor y dejar todas las fichas del instructor en una sola Celda sin repetir el numero de la ficha """
     df = df.groupby(['INSTRUCTOR', 'DOCUMENTO'])['FICHA'].apply(lambda x: ', '.join(x)).reset_index()
-
-    
     
     
     return df.to_json(orient="records")
