@@ -366,7 +366,7 @@ def asistance():
 @app.route("/code/<number>", methods=["GET", "POST"])
 def code(number):
     validar = validate(number)
-    return validar
+    return str(validar)
     
 
    
