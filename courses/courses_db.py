@@ -295,3 +295,14 @@ def course_count_rap_students(course_number):
         students = dict(sorted(students.items()))
         return students if len(data) > 0 else None
     return None
+
+def validate(code):    
+    client = connect()
+    if client:
+        db = client["sara"]
+        collection = db["codes"]
+        code = collection.find_one({"number": code})
+        if code:
+            collection.delete_one({"number": code['number']})
+            return True
+    return False
