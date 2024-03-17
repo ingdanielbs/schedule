@@ -366,8 +366,7 @@ def asistance():
 @app.route("/code/<number>", methods=["GET", "POST"])
 def code(number):
     validar = validate(number)
-    print(validar)
-    return jsonify(validar=validar)
+    return validar
     
 
    
